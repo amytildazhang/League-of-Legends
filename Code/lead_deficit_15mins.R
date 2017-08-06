@@ -10,6 +10,7 @@ library(tidyverse)
 library(readxl)
 library(stringr)
 library(forcats)
+library(ggrepel)
 
 #---------------------------------------------------Read in data
 summerfile <- here("Data") %>% list.files %>%
@@ -17,7 +18,7 @@ summerfile <- here("Data") %>% list.files %>%
 teamgold15 <- read_xlsx(paste0("Data/", summerfile) %>% here,
                        col_types=c("text", rep("guess", 90))) %>%
   filter(player=="Team") %>%
-  select(gameid, league, team, gdat15)
+  select(gameid, league, team, gdat15, result)
 
 savefolder <- here("Output/lead_deficit_15mins/")
 
@@ -48,7 +49,7 @@ walk(teamgold15$league %>% unique, function(lg){
 })
 
 
-#---------------------------------------------------Add annotations
+#---------------------------------------------------Add annotations to graphs
 avg_lines <- teamgold15 %>% group_by(league, team) %>%
   summarise(
     avg=mean(gdat15),
@@ -91,15 +92,61 @@ walk(teamgold15$league %>% unique, function(lg){
 })
 
 
-team_summaries <- teamgold15 %>% group_by(league, team) %>%
+#---------------------------------------------------CSV of summary statistics
+
+team_summaries <- teamgold15 %>% 
+  mutate(ahead=ifelse(gdat15 > 0, 1, -1),
+         result=ifelse(result > 0, 1, -1)) %>%
+  group_by(league, team) %>%
   summarise(
     avg=mean(gdat15),
     lead_avg=ifelse(gdat15 > 0, gdat15, NA) %>% mean(na.rm=TRUE),
     deficit_avg=ifelse(gdat15 < 0, gdat15, NA) %>% mean(na.rm=TRUE),
     abs_avg=abs(gdat15) %>% mean(na.rm=TRUE),
     games_ahead=sum(gdat15>0),
-    games_behind=sum(gdat15<0)
+    games_behind=sum(gdat15<0),
+    games_won=sum(result > 0),
+    games_lost=sum(result < 0),
+    predictive=(sum(ahead==result)/sum(abs(result))*100) %>% round,
+    winahead=(sum(ahead==1 & result==1)/sum(ahead==1)*100) %>% round,
+    losebehind=(sum(ahead==-1 & result==-1)/sum(ahead==-1)*100) %>% round
   ) %>%
-  mutate("%ahead"=(games_ahead/(games_ahead+games_behind)*100) %>% round(digits=0))
+  mutate(
+    "%ahead"=(games_ahead/(games_ahead+games_behind)*100) %>% round(digits=0),
+    "%won"=(games_won/(games_won+games_lost)*100) %>% round(digits=0)
+    )
+
 
 write_csv(team_summaries, paste0(savefolder, "team_summary.csv"))
+
+
+
+
+team_summaries %>%
+  ggplot(aes(x=losebehind, y=winahead)) +
+  geom_point() +
+  theme_minimal() +
+  geom_text_repel(aes(label=paste0(team, " ", sprintf('\u2191'), games_ahead, 
+                                   " ", sprintf('\u2193'), games_behind)), 
+                  size=2) +
+  facet_wrap(~league) +
+  geom_hline(aes(yintercept=50), color="gray") +
+  geom_vline(aes(xintercept=50), color="gray") +
+  xlim(0,100) + ylim(0,100) +
+  labs(x="% games lost when behind at 15", y="% games won when ahead at 15")
+
+
+team_summaries %>%
+  ggplot(aes(x=abs(deficit_avg), y=lead_avg)) +
+  geom_point(aes(color=lead_avg/abs(deficit_avg), 
+                 size=lead_avg/abs(deficit_avg)), alpha=0.8) +
+  theme_minimal() +
+  geom_text_repel(aes(label=paste0(team, " ", sprintf('\u2191'), games_ahead, 
+                                   " ", sprintf('\u2193'), games_behind)), 
+                  size=2) +
+  facet_wrap(~league) +
+  labs(x=expression("avg deficit"), 
+       y=expression("avg lead")) +
+  geom_abline(aes(slope=1, intercept=0), color="gray", linetype="dashed") +
+  labs(size="lead:deficit", color="lead:deficit")
+  
