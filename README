@@ -5,4 +5,10 @@ File genealogy
 - Data
   Excel files with match data from oracleselixir.com. 
 - Code
-  - 
+  - lead_deficit_15_mins.R 
+    Instead of using pure average when comparing gold differences,
+    looks at comparing gold leads to average gold lead, + graphs
+- Output
+  - lead_deficit_15_mins
+    Graphs and CSV file summarizing exploratory results from 
+    lead_deficit_15_mins.R 
