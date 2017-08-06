@@ -128,12 +128,17 @@ team_summaries %>%
   theme_minimal() +
   geom_text_repel(aes(label=paste0(team, " ", sprintf('\u2191'), games_ahead, 
                                    " ", sprintf('\u2193'), games_behind)), 
-                  size=2) +
+                  size=1.5) +
   facet_wrap(~league) +
   geom_hline(aes(yintercept=50), color="gray") +
   geom_vline(aes(xintercept=50), color="gray") +
   xlim(0,100) + ylim(0,100) +
   labs(x="% games lost when behind at 15", y="% games won when ahead at 15")
+
+ggsave(paste0(savefolder, "comparison_winloss_updown.png"),
+       width=8, height=4.5)
+
+
 
 
 team_summaries %>%
@@ -143,10 +148,12 @@ team_summaries %>%
   theme_minimal() +
   geom_text_repel(aes(label=paste0(team, " ", sprintf('\u2191'), games_ahead, 
                                    " ", sprintf('\u2193'), games_behind)), 
-                  size=2) +
+                  size=1.5) +
   facet_wrap(~league) +
   labs(x=expression("avg deficit"), 
        y=expression("avg lead")) +
   geom_abline(aes(slope=1, intercept=0), color="gray", linetype="dashed") +
   labs(size="lead:deficit", color="lead:deficit")
   
+ggsave(paste0(savefolder, "comparison_lead_deficit.png"),
+       width=8, height=4.5)
