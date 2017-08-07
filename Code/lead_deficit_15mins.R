@@ -87,7 +87,7 @@ walk(teamgold15$league %>% unique, function(lg){
     labs(linetype=NULL, x=NULL, y=NULL)
   p
   ggsave(paste0(savefolder, "histogram_", lg, ".png"),
-         width=8, height=2.5, units="in")
+         width=8, height=2, units="in")
   
 })
 
@@ -123,7 +123,7 @@ write_csv(team_summaries, paste0(savefolder, "team_summary.csv"))
 
 
 team_summaries %>%
-  ggplot(aes(x=losebehind, y=winahead)) +
+  ggplot(aes(x=100-losebehind, y=winahead)) +
   geom_point() +
   theme_minimal() +
   geom_text_repel(aes(label=paste0(team, " ", sprintf('\u2191'), games_ahead, 
@@ -133,7 +133,7 @@ team_summaries %>%
   geom_hline(aes(yintercept=50), color="gray") +
   geom_vline(aes(xintercept=50), color="gray") +
   xlim(0,100) + ylim(0,100) +
-  labs(x="% games lost when behind at 15", y="% games won when ahead at 15")
+  labs(x="% games won when behind at 15", y="% games won when ahead at 15")
 
 ggsave(paste0(savefolder, "comparison_winloss_updown.png"),
        width=8, height=4.5)
@@ -142,18 +142,20 @@ ggsave(paste0(savefolder, "comparison_winloss_updown.png"),
 
 
 team_summaries %>%
-  ggplot(aes(x=abs(deficit_avg), y=lead_avg)) +
-  geom_point(aes(color=lead_avg/abs(deficit_avg), 
-                 size=lead_avg/abs(deficit_avg)), alpha=0.8) +
+  ggplot(aes(x=(lead_avg)/(lead_avg-deficit_avg), y=abs_avg/lead_avg)) +
+  geom_point(aes(color=abs_avg, 
+                 size=abs_avg), alpha=0.8) +
   theme_minimal() +
   geom_text_repel(aes(label=paste0(team, " ", sprintf('\u2191'), games_ahead, 
                                    " ", sprintf('\u2193'), games_behind)), 
                   size=1.5) +
-  facet_wrap(~league) +
-  labs(x=expression("avg deficit"), 
-       y=expression("avg lead")) +
-  geom_abline(aes(slope=1, intercept=0), color="gray", linetype="dashed") +
-  labs(size="lead:deficit", color="lead:deficit")
-  
+  facet_wrap(~league, scales="free") +
+  # labs(x="% diff in lead", 
+       # y="average lead") +
+  geom_vline(aes(xintercept=0.5), color="gray") +
+  geom_hline(aes(yintercept=1), color="gray") +
+  # geom_abline(aes(slope=1, intercept=2), color="gray", linetype="dashed") +
+  labs(size="absolute average", color="absolute average")
+
 ggsave(paste0(savefolder, "comparison_lead_deficit.png"),
        width=8, height=4.5)
