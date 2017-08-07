@@ -49,6 +49,10 @@ matchdata <- matchdata %>%
   filter(min_leftover >= 5) %>%
   inner_join(matchdata)
 
+matchdata <- matchdata %>% group_by(player) %>% 
+  summarise(p_games=n()) %>%
+  filter(p_games > 10) %>%
+  right_join(matchdata)
 
 #---------------------------------------------------EDA
 base <- ggplot(matchdata, aes(y=dmgtochamps)) +
@@ -401,14 +405,14 @@ save_dmg_rating <- function(dataset, model){
     arrange(league, desc(dmg_performance)) %T>% 
     write_csv(paste0(savefolder, dataset$position[1], "_dmg_ratings.csv"))
   
-  ggplot(a,  aes(x=fct_reorder(player, perc_diff, mean), y=perc_diff)) +
+  ggplot(a,  aes(x=fct_reorder(paste0(player, " (", p_games, ")"), perc_diff, mean), y=perc_diff)) +
     ylim(-1,1) +
     coord_flip() +
     facet_grid(league ~., scales="free", space="free") +
     geom_boxplot() +
     labs(x=NULL, y="% difference of actual damage from expected") +
     theme_minimal() +
-    geom_vline(xintercept = 0, color="gray") +
+    geom_hline(aes(yintercept = 0), color="red") +
     theme(axis.text.y = element_text(size=8))
   
   ggsave(paste0(savefolder, dataset$position[1], "_graph.png"),
