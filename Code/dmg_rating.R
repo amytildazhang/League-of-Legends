@@ -28,7 +28,8 @@ matchdata <- here("Data/") %>%
          firedrakes, dmgtochamps, dmgtochampsperminute,
          earnedgpm, goldspent, totalgold, dmgshare) %>%
   filter(!(week %in% c("QF", "T", "F", "R1", "R2", 
-                                 "R3", "RR", "SF", "3P"))) %>%
+                                 "R3", "RR", "SF", "3P")),
+         league %in% c("NALCS", "EULCS", "LCK", "LMS")) %>%
   mutate(week=week %>% as.numeric) %>%
   filter(split=="2017-2" | week >= 9) %>%
   filter(!is.na(dmgtochamps)) %>%
@@ -575,11 +576,12 @@ abline(h=0)
 
 #----------------------more sanity checks
 
-fit <- lm(r_models[[12]], matchdata)
+fit <- lm(r_models[[4]], matchdata)
 fit$residuals <- (matchdata$dmgtochamps - exp(fit$fitted.values))/
   matchdata$dmgtochamps
 
 matchdata$resid <- fit$residuals
+matchdata$predicted <- fit$fitted.values %>% exp
 oks_curve <- (fit$model$`poly(otherkillshare, 3)`[,1]*-9.729924 +
                 fit$model$`poly(otherkillshare, 3)`[,2]*-6.199987 +
                 fit$model$`poly(otherkillshare, 3)`[,3]*6.086321) 
@@ -672,28 +674,89 @@ walk(c("Top", "Jungle", "Middle", "ADC", "Support"), function(pos, fit){
   }, fit)
 
 
-
-walk(unique(matchdata$position), function(pos){
-  a <- matchdata %>% filter(position == pos) 
+#remove players who role-swapped
+matchdata <- matchdata %>% 
+  left_join(matchdata %>%
+              group_by(player, position) %>%
+              summarise(n_games = n()) )
+purple <- "#85016E"
+red <- "#FF020A"
+blue <- "#0980B2"
+yellow <- "#C4A20A"
+green <- "#006112"
+walk(unique(matchdata$league), function(lg){
+  a <- matchdata %>% filter(league == lg) 
   a %>%
-    group_by(league, team, player) %>%
-    summarise(dmg_performance = mean(resid)*100) %>% 
-    arrange(league, desc(dmg_performance)) %T>% 
-    write_csv(paste0(savefolder, dataset$position[1], "_dmg_ratings.csv"))
-  
-  ggplot(a,  aes(x=fct_reorder(paste0(player, " (", p_games, ")"), resid, mean),
-                 y=resid)) +
-    ylim(-1,1) +
-    coord_flip() +
-    facet_grid(league ~., scales="free", space="free") +
-    geom_boxplot() +
-    labs(x=NULL, y="% difference of actual damage from expected") +
+    group_by(position, team, player) %>%
+    summarise(dmg_performance = round(mean(resid)*100, digits=2)) %>% 
+    arrange(position, desc(dmg_performance)) %T>% 
+    write_csv(paste0(savefolder, lg, "_dmg_ratings.csv"))
+
+  c <- a %>% filter(n_games >= 8) %>%
+    group_by(player, n_games, position) %>%
+    summarise(
+      total_predicted = sum(predicted),
+      avg_predicted = mean(predicted),
+      mean_r = mean(resid)*100,
+      median_r = median(resid)*100,
+      raw_avg_dmg = mean(dmgtochamps)
+    ) %>% 
+    mutate(#diff=ifelse(median_r > mean_r, sprintf('\u2191'), sprintf('\u2193')),
+           #sign = ifelse(mean_r > 0, "+", "-"),
+           avg_dmg = (total_predicted*mean_r + total_predicted)/n_games)
+  c <- c %>%
+    left_join(c %>% group_by(position) %>%
+                summarise(max_predicted = max(avg_predicted)))
+  c %>%
+    ggplot(aes(x=mean_r, y=median_r)) +
+    labs(y="actual", size="% of highest prediction/position") +
+    geom_point(aes(size=avg_predicted/max_predicted), alpha=0.7) +
+    geom_abline(aes(slope=1, intercept=0), color="gray", linetype="dotdash") +
+    geom_vline(aes(xintercept=0), color="gray") +
+    geom_hline(aes(yintercept=0), color="gray") +
+    geom_text_repel(aes(label=player), force=3,
+                    size=2, box.padding = unit(0.75, "lines")) +
+    facet_wrap(~position) +
     theme_minimal() +
-    geom_hline(aes(yintercept = 0), color="red") +
-    theme(axis.text.y = element_text(size=8))
+    theme(legend.position = "bottom")
+  ggsave(paste0(savefolder, lg, "_meanvsmedian_graph.png"),
+         width=10, height=7.5)
   
-  ggsave(paste0(savefolder, dataset$position[1], "_graph.png"),
-         width=6, height=14)
+  a %>% filter(n_games >= 8) %>%
+    ggplot(aes(x=factor(player) %>% fct_reorder(resid, mean), 
+               y=resid)) +
+    labs(y="% diff from expected", fill=NULL) +
+    ylim(-1,1) +
+    geom_boxplot(aes(fill=position %>% 
+                       fct_relevel(c("Top", "Jungle", "Middle", "ADC", "Support"))), 
+                 alpha=0.7) +
+      stat_summary(fun.y=mean, geom="point",
+                   size=0.8, shape=8) +
+    scale_fill_manual(values=c(yellow, green, blue, red, purple)) +
+    coord_flip() +
+    theme_minimal() +
+    geom_hline(aes(yintercept=0))
+  ggsave(paste0(savefolder, lg, "_graph_all.png"),
+         width=5, height=14)
+  
+
+  
+  #   a %>%
+  #   filter(n_games >= 8) %>%
+  # ggplot(aes(x=fct_reorder(paste0(player, " (", n_games, ")"), resid),
+  #                y=resid)) +
+  #   ylim(-1,1) +
+  #   coord_flip() +
+  #   facet_grid(league ~ ., scales="free", space="free") +
+  #   geom_boxplot() +
+  #   stat_summary(fun.y=mean, colour="red", geom="point", 
+  #                size=1) + 
+  #   labs(x=NULL, y="% difference of actual damage from expected") +
+  #   theme_minimal() +
+  #   geom_hline(aes(yintercept = 0), color="red") +
+  #   theme(axis.text.y = element_text(size=8)) +
+  #   ggsave(paste0(savefolder, lg, "_graph.png"),
+  #        width=6, height=14)
   })
 
 
@@ -702,6 +765,12 @@ walk(unique(matchdata$position), function(pos){
 
 base <- ggplot(matchdata, aes(y=resid)) +
   facet_grid(. ~ position, scales="free", space="free")
+
+base + geom_boxplot((aes(x=league))) + 
+  ylim(-2,1) +
+  theme(
+    axis.text.x = element_text(size=6)
+  )
 
 base + geom_boxplot(aes(x=champion)) + coord_flip() +
   facet_grid(position ~ ., scales="free", space="free")

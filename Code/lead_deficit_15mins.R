@@ -11,6 +11,7 @@ library(readxl)
 library(stringr)
 library(forcats)
 library(ggrepel)
+library(cowplot)
 
 #---------------------------------------------------Read in data
 summerfile <- here("Data") %>% list.files %>%
@@ -113,27 +114,54 @@ team_summaries <- teamgold15 %>%
   ) %>%
   mutate(
     "%ahead"=(games_ahead/(games_ahead+games_behind)*100) %>% round(digits=0),
-    "%won"=(games_won/(games_won+games_lost)*100) %>% round(digits=0)
-    )
+    "%won"=(games_won/(games_won+games_lost)*100) %>% round(digits=0),
+    game_record = games_won/(games_won + games_lost)
+    ) %>%
+  arrange(league, -game_record) %>%
+  group_by(league) %>%
+  mutate(rank = row_number())
 
 
 write_csv(team_summaries, paste0(savefolder, "team_summary.csv"))
 
 
+yellow <- "#C4A20A"
+red <- "#FF020A"
 
-
-team_summaries %>%
+winloss_updown <- team_summaries %>%
   ggplot(aes(x=100-losebehind, y=winahead)) +
-  geom_point() +
+  geom_point(aes(color=(games_ahead > 7 & games_behind > 7))) +
+  scale_color_manual(values=c(red, "black"), 
+                     breaks=list(FALSE),
+                     labels=c("<7 games ahead/behind", NULL)) +
   theme_minimal() +
-  geom_text_repel(aes(label=paste0(team, " ", sprintf('\u2191'), games_ahead, 
+  geom_text_repel(aes(label=paste0("(", rank, ") ",
+                                   team, " ", sprintf('\u2191'), games_ahead, 
                                    " ", sprintf('\u2193'), games_behind)), 
-                  size=1.5) +
+                  size=2) +
+ # facet_wrap(~league, ncol=1) +
   facet_wrap(~league) +
   geom_hline(aes(yintercept=50), color="gray") +
   geom_vline(aes(xintercept=50), color="gray") +
-  xlim(0,100) + ylim(0,100) +
-  labs(x="% games won when behind at 15", y="% games won when ahead at 15")
+  # xlim(0,100) + ylim(0,100) +
+  scale_x_continuous(minor_breaks = seq(0 , 100, 10), 
+                     breaks = seq(0, 100, 20), 
+                     limits=c(0,100)) +
+  scale_y_continuous(minor_breaks = seq(0 , 100, 10), 
+                     breaks = seq(0, 100, 20), 
+                     limits=c(0,100)) +
+  labs(x="when behind at 15", 
+       y="when ahead at 15",
+       color=NULL,
+       title="% games won") +
+  theme(legend.position = "top",
+        legend.justification = "left",
+        legend.box.margin = margin(t=0, r=0, b=-5, l=-12,unit="pt"),
+        legend.box.spacing = unit(0.5, "pt"),
+        legend.text = element_text(size=6),
+        legend.title = element_text(size=8),
+        plot.title = element_text(margin=margin(b=-7, unit="pt")))
+winloss_updown
 
 ggsave(paste0(savefolder, "comparison_winloss_updown.png"),
        width=8, height=4.5)
@@ -142,20 +170,75 @@ ggsave(paste0(savefolder, "comparison_winloss_updown.png"),
 
 
 team_summaries %>%
-  ggplot(aes(x=(lead_avg)/(lead_avg-deficit_avg), y=abs_avg/lead_avg)) +
-  geom_point(aes(color=abs_avg, 
-                 size=abs_avg), alpha=0.8) +
+  ggplot(aes(x=(lead_avg)/(lead_avg-deficit_avg), 
+             # y=(games_ahead)/(games_ahead + games_behind))) +
+  y=game_record)) +
+  geom_point(aes(color=(abs_avg + lead_avg + deficit_avg)/3, 
+                 size=(abs_avg + lead_avg + deficit_avg)/3), 
+                 alpha=0.8) +
   theme_minimal() +
-  geom_text_repel(aes(label=paste0(team, " ", sprintf('\u2191'), games_ahead, 
+  geom_text_repel(aes(label=paste0("(", rank, ") ",
+                                   team, " ", sprintf('\u2191'), games_ahead, 
                                    " ", sprintf('\u2193'), games_behind)), 
                   size=1.5) +
-  facet_wrap(~league, scales="free") +
-  # labs(x="% diff in lead", 
-       # y="average lead") +
+  facet_wrap(~league) +
+  labs(x="average lead %/% (average lead + average deficit)",
+       y="% games ahead") +
   geom_vline(aes(xintercept=0.5), color="gray") +
-  geom_hline(aes(yintercept=1), color="gray") +
-  # geom_abline(aes(slope=1, intercept=2), color="gray", linetype="dashed") +
-  labs(size="absolute average", color="absolute average")
-
+  geom_hline(aes(yintercept=0.5), color="gray") +
+  labs(size="absolute average", color="absolute average") +
+  theme(legend.position = "bottom",
+        legend.title=element_text(size=8),
+        legend.text = element_text(size=6)) +
+  scale_x_continuous(minor_breaks = seq(0 , 1, 0.1), 
+                     breaks = seq(0, 1, 0.2), 
+                     limits=c(0.2,0.8)) +
+  scale_y_continuous(minor_breaks = seq(0 , 1, 0.1), 
+                     breaks = seq(0, 1, 0.2), 
+                     limits=c(0.2,0.8))
+  
 ggsave(paste0(savefolder, "comparison_lead_deficit.png"),
        width=8, height=4.5)
+
+
+
+comparison_lead_deficit <- team_summaries %>%
+  ggplot(aes(x=-deficit_avg,
+             y=lead_avg)) +
+  geom_point(aes(color=game_record), 
+             alpha=0.8) +
+ # scale_color_continuous(high="#132B43", low="#56B1F7") +
+  theme_minimal() +
+  geom_text_repel(aes(label=paste0("(", rank, ") ",
+                                   team, " ", sprintf('\u2191'), games_ahead, 
+                                   " ", sprintf('\u2193'), games_behind)), 
+                  size=2) +
+  facet_wrap(~league, scales="free") +
+  geom_abline(aes(slope=1, intercept=0), color="gray") +
+  labs(size="|average|", color="game win %",
+       title="Average leads vs deficits",
+       x="Average deficit", y="Average lead") +
+  theme(legend.position = "top",
+        legend.justification = "left",
+        legend.box.margin = margin(t=2, r=0, b=-5, l=-6,unit="pt"),
+        legend.box.spacing = unit(0.5, "pt"),
+        legend.text = element_text(size=6),
+        legend.title = element_text(size=8),
+        plot.title = element_text(margin=margin(b=-7, unit="pt")),
+        legend.key.size = unit(5, "pt"),
+        legend.key.width = unit(10, "pt")) #+
+comparison_lead_deficit
+
+plot_grid(winloss_updown + facet_wrap(~league, ncol=1) +
+            scale_x_continuous(minor_breaks = seq(0 , 100, 10), 
+                               breaks = seq(0, 100, 20), 
+                               limits=c(0,100),
+                               position="top") +
+            theme(axis.text.y = element_text(hjust=0)),
+          comparison_lead_deficit + facet_wrap(~league, scales="free", ncol=1) +
+            scale_x_continuous(position="top"),
+          align="h") +
+  ggsave(paste0(savefolder, "size_vs_percentage.png"),
+                width=7, height=14)
+
+
