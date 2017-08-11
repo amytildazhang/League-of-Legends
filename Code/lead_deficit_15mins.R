@@ -37,18 +37,20 @@ teamgold15 <- teamgold15 %>% filter(league %in% include_leagues)
 
 bwidth = 300
 
-walk(teamgold15$league %>% unique, function(lg){
-  n_teams <- teamgold15$team[teamgold15$league == lg] %>% unique %>% length
-  p <- teamgold15 %>% filter(league==lg) %>%
-    ggplot(aes(x=gdat15)) +
-    geom_histogram(binwidth=bwidth, center=bwidth/2) +
-    facet_wrap(~team, ncol=n_teams/2) +
-    geom_vline(aes(xintercept=0), color="red")
-  ggsave(here(paste0("Output/lead_deficit_15mins/histogram_", lg, ".png")),
-         width=8, height=2, units="in")
-    
-})
-
+# walk(teamgold15$league %>% unique, function(lg){
+#   n_teams <- teamgold15$team[teamgold15$league == lg] %>% unique %>% length
+#   teamgold15 %>% filter(league==lg) %>%
+#     ggplot(aes(x=gdat15)) +
+#     geom_histogram(binwidth=bwidth, center=bwidth/2) +
+#     facet_wrap(~team, ncol=n_teams/2) +
+#     geom_vline(aes(xintercept=0), color="red") +
+#     theme_minimal()+
+#     theme(axis.text = element_text(size=6))
+#   ggsave(here(paste0("Output/lead_deficit_15mins/histogram_", lg, ".png")),
+#          width=8, height=2, units="in")
+#     
+# })
+# 
 
 #---------------------------------------------------Add annotations to graphs
 avg_lines <- teamgold15 %>% group_by(league, team) %>%
@@ -138,7 +140,7 @@ winloss_updown <- team_summaries %>%
   geom_text_repel(aes(label=paste0("(", rank, ") ",
                                    team, " ", sprintf('\u2191'), games_ahead, 
                                    " ", sprintf('\u2193'), games_behind)), 
-                  size=2) +
+                  size=2, force=4) +
  # facet_wrap(~league, ncol=1) +
   facet_wrap(~league) +
   geom_hline(aes(yintercept=50), color="gray") +
@@ -164,7 +166,7 @@ winloss_updown <- team_summaries %>%
 winloss_updown
 
 ggsave(paste0(savefolder, "comparison_winloss_updown.png"),
-       width=8, height=4.5)
+       width=8, height=6)
 
 
 
@@ -197,10 +199,6 @@ team_summaries %>%
                      breaks = seq(0, 1, 0.2), 
                      limits=c(0.2,0.8))
   
-ggsave(paste0(savefolder, "comparison_lead_deficit.png"),
-       width=8, height=4.5)
-
-
 
 comparison_lead_deficit <- team_summaries %>%
   ggplot(aes(x=-deficit_avg,
@@ -212,7 +210,7 @@ comparison_lead_deficit <- team_summaries %>%
   geom_text_repel(aes(label=paste0("(", rank, ") ",
                                    team, " ", sprintf('\u2191'), games_ahead, 
                                    " ", sprintf('\u2193'), games_behind)), 
-                  size=2) +
+                  size=2, force=4) +
   facet_wrap(~league, scales="free") +
   geom_abline(aes(slope=1, intercept=0), color="gray") +
   labs(size="|average|", color="game win %",
@@ -228,15 +226,15 @@ comparison_lead_deficit <- team_summaries %>%
         legend.key.size = unit(5, "pt"),
         legend.key.width = unit(10, "pt")) #+
 comparison_lead_deficit
+ggsave(paste0(savefolder, "comparison_lead_deficit.png"),
+       width=8, height=6)
 
-plot_grid(winloss_updown + facet_wrap(~league, ncol=1) +
-            scale_x_continuous(minor_breaks = seq(0 , 100, 10), 
-                               breaks = seq(0, 100, 20), 
-                               limits=c(0,100),
-                               position="top") +
+
+
+plot_grid(winloss_updown + facet_wrap(~league, ncol=1, scales="free") +
+
             theme(axis.text.y = element_text(hjust=0)),
-          comparison_lead_deficit + facet_wrap(~league, scales="free", ncol=1) +
-            scale_x_continuous(position="top"),
+          comparison_lead_deficit + facet_wrap(~league, scales="free", ncol=1),
           align="h") +
   ggsave(paste0(savefolder, "size_vs_percentage.png"),
                 width=7, height=14)
