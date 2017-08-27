@@ -15,6 +15,7 @@ library(readxl)
 library(stringr)
 library(forcats)
 library(magrittr)
+library(ggrepel)
 
 #---------------------------------------------------Read in data
 matchdata <- here("Data/") %>% 
@@ -521,30 +522,11 @@ r_models <- c(
   sqrt(dmgtochamps) ~ champion + position*poly(log(gamelength), 2) + poly(otherkillshare, 3),
   
   dmgtochampsperminute ~ champion*factor(result),
-  sqrt(dmgtochamps) ~ champion*factor(result) + position
+  sqrt(dmgtochamps) ~ champion*factor(result) + position,
+  sqrt(dmgtochamps) ~ champion*league + position*log(goldspent) #
   
   )
 
-log_models <- c(
-  log(dmgtochamps) ~ champion + position*goldspent,
-  log(dmgtochamps) ~ champion + result,
-  log(dmgtochamps) ~ champion + position*goldspent + result,
-  log(dmgtochamps) ~ champion + position*log(goldspent), #
-  
-  log(dmgtochamps) ~ champion*goldspent + position*goldspent + result,
-  log(dmgtochamps) ~ champion + position*gamelength,
-  log(dmgtochamps) ~ champion + position*log(gamelength), #
-  log(dmgtochamps) ~ champion*log(gamelength) + position*log(gamelength),
-  
-  log(dmgtochamps) ~ champion*log(gamelength) + position*log(gamelength) + result,
-  log(dmgtochamps) ~ champion*log(gamelength) + position*log(gamelength) + poly(otherkillshare, 3),#
-  log(dmgtochamps) ~ champion + position*log(gamelength) + poly(otherkillshare, 3),#
-  log(dmgtochamps) ~ champion + position*poly(log(gamelength), 2) + poly(otherkillshare, 3),
-  
-  dmgtochampsperminute ~ champion*factor(result),
-  log(dmgtochamps) ~ champion*factor(result) + position
-  
-)
 
 
 set.seed(715)
@@ -561,17 +543,12 @@ map_dbl(r_models, function(model){
   ((actual-pred^2)/pred^2) %>% mean
 }) 
 
-map_dbl(log_models, function(model){
-  tfit <- lm(model, data=matchdata[train_idx,])
-  pred <- predict(tfit, newdata=matchdata[test_idx,])
-  actual <- matchdata$dmgtochamps[test_idx]
-  if (model == 13){
-    return((actual-pred)/pred %>% mean)
-  }
-  ((actual-exp(pred))/exp(pred)) %>% mean
-}) 
 
-
+i <- 14
+fit <- lm(r_models[[i]], matchdata)
+sink(paste0(savefolder, i, "/Diagnostics/lm_summary.txt"))
+summary(fit)
+sink()
 
 fit_model_with_resid <- function(i, matchdata, r_models){
   fit <- lm(r_models[[i]], matchdata)
@@ -619,10 +596,7 @@ output_diagnostics <- function(i, matchdata, r_models){
   
   
   
-  sink(paste0(savefolder, i, "/Diagnostics/lm_summary.txt"))
-  summary(fit)
-  sink()
-  
+   
   a <- matchdata$otherkills/matchdata$teamkills
   pdf(paste0(savefolder, i, "/Diagnostics/diagnostics.pdf"))
   par(mfrow=c(1,1))
@@ -687,23 +661,23 @@ output_diagnostics <- function(i, matchdata, r_models){
     
   }
   
-  
-  hv <- tibble(
-    hatvals = hatvalues(fit),
-    position = matchdata$position,
-    champion = matchdata$champion) %>% 
-    group_by(position, champion) 
-  hv_mean <- hv %>%
-    summarise(meanhv = mean(hatvals)) %>%
-    full_join(hv) %>%
-    mutate(
-      hvratio = hatvals/meanhv
-    )
-  nrow(hv_mean) == nrow(hv)
-  nrow(hv) == nrow(matchdata)
-  
-  matchdata$highhat <- hv_mean$hvratio
-  
+  #  
+  # hv <- tibble(
+  #   hatvals = hatvalues(fit),
+  #   position = matchdata$position,
+  #   champion = matchdata$champion) %>% 
+  #   group_by(position, champion) 
+  # hv_mean <- hv %>%
+  #   summarise(meanhv = mean(hatvals)) %>%
+  #   full_join(hv) %>%
+  #   mutate(
+  #     hvratio = hatvals/meanhv
+  #   )
+  # nrow(hv_mean) == nrow(hv)
+  # nrow(hv) == nrow(matchdata)
+  # 
+  # matchdata$highhat <- hv_mean$hvratio
+  # 
   
   if (i == 13){
     predictions <- tibble(
@@ -874,9 +848,12 @@ output_rankings <- function(i, matchdata, r_models){
   walk(unique(adj_data$league), function(lg){
     a <- adj_data %>% filter(league == lg) 
     a %>%
+      select(league, team, player, champion, dmgtochamps, predicted, goldspent) %>%
+      write_csv(paste0(savefolder, i, "/Rankings/", lg, "_dmg_vals.csv"))
+    a %>%
       group_by(position, team, player) %>%
-      summarise(dmg_performance = round(mean(resid)*100, digits=2)) %>% 
-      arrange(position, desc(dmg_performance)) %>% 
+      summarise(dmg_performance = round(mean(resid)*100, digits=2)) %>%
+      arrange(position, desc(dmg_performance)) %>%
       write_csv(paste0(savefolder, i, "/Rankings/", lg, "_dmg_ratings.csv"))
     
     c <- a %>% filter(n_games >= 8) %>%
@@ -910,6 +887,41 @@ output_rankings <- function(i, matchdata, r_models){
     ggsave(paste0(savefolder, i, "/Rankings/", lg, "_meanvsmedian_graph.png"),
            width=10, height=7.5)
     
+    color_vals <- rep(c(blue, yellow, red), 6)
+    shape_vals <- rep(1:6, each=3)
+    alpha_vals <- rep(seq(1, 0.5, by=-0.1), 3)
+    walk(unique(a$position), function(pos){
+      n_champs <- unique(a$champion[a$position == pos]) %>% length
+      p <- a %>% filter(n_games >= 8, position == pos)
+      max_y <- (max(p$resid) + 0.1) %>% round(digits=1)
+      a %>% filter(n_games >= 8, position == pos) %>%
+        ggplot(aes(x=predicted, y=resid, color=champion, shape=champion)) +
+        geom_point(aes(alpha=champion), stroke=0.8) +
+        scale_colour_manual(name = "Champion",
+                            values = color_vals[1:n_champs]) +
+          scale_shape_manual(name = "Champion",
+                             values = shape_vals[1:n_champs]) +
+        scale_alpha_manual(name = "Champion",
+                           values = alpha_vals[1:n_champs]) +
+        facet_wrap(~player, nrow=3) +
+        theme_minimal() +
+        labs(y="% diff") +
+        geom_hline(aes(yintercept=0), color="gray") +
+        geom_abline(aes(slope=1, intercept=0), color="gray") +
+        scale_y_continuous(breaks=seq(-1, max_y, by=0.5),
+                           minor_breaks=seq(-1, max_y, by=0.1))
+    
+      ncols <- ceiling(n_champs/3)
+      
+      ggsave(paste0(savefolder, i, "/Rankings/", lg, 
+                    "_breakdown_", pos, ".png"),
+             width=ncols*2+1, height=6)
+    })
+    
+     
+    
+    
+    
     c %>%
       ggplot(aes(x=avg_predicted, y=mean_r)) +
       geom_point(alpha=0.7, size=2) +
@@ -922,8 +934,6 @@ output_rankings <- function(i, matchdata, r_models){
     ggsave(paste0(savefolder, i, "/Rankings/", lg, "_dmgvsresid_graph.png"),
            width=10, height=7.5)
     
-    
-
    ranks <- a %>% filter(n_games >= 8) %>%
       mutate(resid = 100*resid,
              plabel = paste0(" (", n_games, ") ", player)) %>%
@@ -955,6 +965,8 @@ output_rankings <- function(i, matchdata, r_models){
       ggsave(paste0(savefolder, i, "/Rankings/", lg, "_graph_byposition.png"),
            width=15, height=8)
   })
+  
+  
     
 }
 
@@ -1001,4 +1013,181 @@ abline(h=0)
 plot(fit$residuals ~ dataset$killshare, main="Resid vs killshare")
 abline(h=0)
 summary(fit)
+
+
+
+#------------------Squared Relative Error, Newton-raphson------------------#
+sq.re <- function(Y, X, betas){
+  fit <- X %*% betas
+  (t(Y-exp(fit))%*%(Y-exp(fit)))/(Y*exp(fit))
+}
+
+
+sq.re.dev <- function(Y, X, betas){
+  sapply(1:length(Y), function(i){
+    1/Y[i]*(sum(X[i,])*exp(t(-X[i,])*betas)*(exp(2*t(X[i,])*betas)-Y[i]^2))
+  }) %>%
+    sum
+}
+
+
+
+max_iter <- 100000
+sqre <- rep(NA, max_iter)
+deriv <- rep(NA, max_iter)
+fit <- lm(log(dmgtochamps) ~ champion + position*log(goldspent), data=matchdata)
+X <- model.matrix(log(dmgtochamps) ~ champion + position*log(goldspent),
+                  data=matchdata)
+betas <- matrix(rep(NA, max_iter*ncol(X)), ncol=ncol(X))
+betas[1,] <- fit$coefficients
+for (iter in 2:max_iter){
+  sqre[iter] <- sq.re(matchdata$dmgtochamps, X, betas[iter-1,])
+  deriv[iter] <- sq.re.dev(matchdata$dmgtochamps, X, betas[iter-1,]) 
+  betas[iter,] <- betas[iter-1,] -  (sqre[iter]/deriv[iter])
+  if (deriv[iter] %>% abs < 0.0001) break;
+}
+
+
+
+numderiv <- function(Y, X, betas){
+  upper <- sq.re(Y, X, betas+0.0001)
+  lower <- sq.re(Y, X, betas-0.0001)
+  return((upper-lower)/0.0002)
+}
+
+fit <- 
+b0 = 
+for (i in 1:1e5){
+  
+}
+
+
+
+re.match <- tibble(
+  dmgtochamps = 1,
+  champion = matchdata$champion,
+  position= matchdata$position,
+  goldspent=log(matchdata$goldspent)/matchdata$dmgtochamps
+)
+
+fit <- lm(dmgtochamps ~ -1 + champion:goldspent + position:goldspent, data=re.match)
+fit$fitted.values <- fit$fitted.values*matchdata$dmgtochamps
+fit$residuals<- fit$residuals*matchdata$dmgtochamps
+plot(fit, ask=F)
+
+
+
+weights <- diag(1/matchdata$dmgtochamps)
+X <- model.matrix(dmgtochamps ~ champion + position*exp(goldspent),
+                  data=matchdata)
+newcoef <- solve(t(X)%*%weights%*%weights%*%X)%*%t(X)%*%weights%*%weights%*%matchdata$dmgtochamps
+fitted.values <- X%*%newcoef
+residuals <- matchdata$dmgtochamps - fitted.values
+(residuals/fitted.values)^2 %>% mean
+plot(residuals/fitted.values ~ fitted.values)
+plot(residuals/matchdata$dmgtochamps ~ fitted.values)
+matchdata$resid <- residuals
+matchdata$predicted <- fitted.values
+
+
+
+
+purple <- "#85016E"
+red <- "#FF020A"
+blue <- "#0980B2"
+yellow <- "#C4A20A"
+green <- "#006112"
+
+
+matchdata$resid <- fit$residuals/fit$fitted.values
+matchdata$predicted <- fit$fitted.values
+  
+  
+  a <- matchdata$otherkills/matchdata$teamkills
+  pdf(paste0(savefolder, i, "/Diagnostics/diagnostics.pdf"))
+  par(mfrow=c(1,1))
+  hist(residuals/fitted.values)
+  
+  plot(residuals/fitted.values ~ matchdata$otherkillshare, main="Other kill share")
+  abline(h=0)
+  
+  boxplot(residuals/fitted.values ~ matchdata$champion, main="% Resid vs champion")
+  
+  boxplot(residuals/fitted.values ~ factor(matchdata$result), main="% Resid vs result") 
+  
+  boxplot(residuals/fitted.values ~ factor(matchdata$firedrakes), main="% Resid vs firedrakes")
+  # boxplot(residuals/fitted.values ~ factor(matchdata$league), main="Resid vs league")
+  # boxplot(residuals/fitted.values ~ factor(matchdata$side), main="Resid vs side")
+  
+  plot(residuals/fitted.values ~ log(matchdata$gamelength), main="% Resid vs log(gamelength)",
+       ylim=c(-2,2))
+  abline(h=0)
+  
+  plot(residuals/fitted.values ~ matchdata$goldspent, main="% Resid vs goldspent")
+  abline(h=0)
+  plot(actual_r ~ matchdata$goldspent, main="Resid vs goldspent")
+  abline(h=0)
+  
+  plot(residuals/fitted.values ~ log(matchdata$otherkills + 0.1), main="% Resid vs log(otherkills)")
+  abline(h=0)
+  
+  plot(residuals/fitted.values ~ log(matchdata$teamkills + 0.1), main="% Resid vs log(teamkills)")
+  abline(h=0)
+  
+  plot(residuals/fitted.values ~ matchdata$killshare, main="% Resid vs killshare")
+  abline(h=0)
+  
+  dev.off()
+  
+  predictions <- tibble(
+    goldspent = matchdata$goldspent, 
+    gamelength= matchdata$gamelength,
+    result = matchdata$result,
+    dmgtochamps = fitted.values[,1], #predicted
+    resid = (residuals/fitted.values)[,1],
+    champion = matchdata$champion,
+    position = matchdata$position,
+    dmgtochampsperminute = NA
+  ) 
+  
+   
+  
+  walk(c("Top", "Jungle", "Middle", "ADC", "Support"), function(pos, fit){
+    
+    n_champs <- length(unique(matchdata$champion[matchdata$position==pos]))  
+    matchdata %>% filter(position==pos) %>%
+      ggplot(aes(x=gamelength, y=dmgtochamps)) +
+      geom_point(alpha=0.5) +
+      geom_line(data=predictions %>% filter(position==pos)) +
+      scale_color_manual(values=c(blue, red)) +
+      facet_wrap(~champion) +
+      theme_minimal() +
+      theme(axis.text=element_text(size=8))
+
+      matchdata %>% filter(position==pos) %>%
+        ggplot(aes(x=goldspent, y=dmgtochamps)) +
+        geom_point(alpha=0.5) +
+        geom_line(data=predictions %>% filter(position==pos)) +
+        scale_color_manual(values=c(blue, red)) +
+        facet_wrap(~champion) +
+        theme_minimal() +
+        theme(axis.text=element_text(size=8)) 
+      
+      ggplot(predictions %>% filter(position==pos), 
+             aes(x=log(dmgtochamps), y=resid)) +
+        facet_wrap(~champion, scales="free") +
+        geom_point(aes(shape=factor(result),
+                       color=factor(result)), alpha=0.7) + 
+        scale_color_manual(values=c(blue, red)) +
+        geom_hline(aes(yintercept=0), color="gray") +
+        theme_minimal() + 
+        theme(axis.text=element_text(size=8))
+      
+      ggsave(paste0(savefolder, i, "/Diagnostics/residual_graph_", pos, ".png"),
+             height=ceiling(n_champs/4)*1.5, width=8.5)    
+      
+      }
+    
+ 
+)
 

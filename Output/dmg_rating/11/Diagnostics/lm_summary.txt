@@ -1,0 +1,174 @@
+
+Call:
+lm(formula = r_models[[i]], data = matchdata)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-77.100 -11.866  -0.664  11.514 101.461 
+
+Coefficients:
+                                 Estimate Std. Error t value Pr(>|t|)
+(Intercept)                     -285.1169     9.4535 -30.160  < 2e-16
+championAlistar                  -19.9756     4.3030  -4.642 3.50e-06
+championAshe                      -4.6509     4.6103  -1.009 0.313101
+championBard                       3.7475     4.6765   0.801 0.422960
+championBlitzcrank               -13.2204     4.4180  -2.992 0.002777
+championBraum                    -15.6837     3.9118  -4.009 6.14e-05
+championCaitlyn                    8.8868     4.6629   1.906 0.056707
+championCamille                   -5.7624     4.1637  -1.384 0.166408
+championCassiopeia                 1.1499     3.0270   0.380 0.704034
+championCho'gath                  -3.7150     4.2742  -0.869 0.384786
+championCorki                     25.2081     2.7968   9.013  < 2e-16
+championEkko                      -6.8254     4.6158  -1.479 0.139260
+championElise                      4.8846     4.0019   1.221 0.222278
+championEzreal                    16.1082     5.3032   3.037 0.002393
+championFiora                      7.8994     4.4372   1.780 0.075070
+championGalio                    -16.6208     2.9798  -5.578 2.52e-08
+championGnar                      -0.3238     4.0229  -0.080 0.935842
+championGragas                   -10.5301     3.8334  -2.747 0.006029
+championGraves                     2.8669     4.2496   0.675 0.499930
+championIvern                    -31.6256     5.3270  -5.937 3.03e-09
+championJanna                    -37.8654     4.9742  -7.612 3.00e-14
+championJarvan IV                -13.6474     3.7545  -3.635 0.000280
+championJax                       -1.5468     4.8133  -0.321 0.747942
+championJayce                     15.7405     3.7704   4.175 3.01e-05
+championJhin                       1.8747     4.7785   0.392 0.694832
+championKalista                   -6.7236     4.6424  -1.448 0.147578
+championKarma                     -3.8741     3.5178  -1.101 0.270810
+championKassadin                   6.6047     3.6193   1.825 0.068058
+championKennen                     5.9433     4.2759   1.390 0.164577
+championKha'zix                    4.6672     4.1086   1.136 0.256015
+championKled                      -6.9253     4.0154  -1.725 0.084628
+championKog'Maw                   16.2720     4.9058   3.317 0.000914
+championLeBlanc                   16.5208     3.3304   4.961 7.17e-07
+championLee Sin                  -13.6024     4.0345  -3.372 0.000751
+championLucian                     7.3087     3.4474   2.120 0.034030
+championLulu                     -20.2123     4.0665  -4.970 6.82e-07
+championMalzahar                  14.1278     4.1305   3.420 0.000628
+championMaokai                    -3.6969     3.9706  -0.931 0.351843
+championMorgana                   -0.1055     4.7776  -0.022 0.982389
+championNami                     -14.7235     5.3619  -2.746 0.006047
+championNautilus                 -13.7809     4.1709  -3.304 0.000957
+championNidalee                   12.5922     5.3753   2.343 0.019174
+championOlaf                      -4.2280     4.9338  -0.857 0.391500
+championOrianna                    1.8018     2.6759   0.673 0.500738
+championRakan                    -16.7079     4.0585  -4.117 3.88e-05
+championRek'Sai                  -12.7332     4.1258  -3.086 0.002034
+championRenekton                 -10.8351     3.8138  -2.841 0.004508
+championRengar                    -5.0364     4.3540  -1.157 0.247423
+championRumble                    14.4991     3.8354   3.780 0.000158
+championSejuani                  -15.5773     4.5693  -3.409 0.000655
+championShen                     -18.1624     3.8674  -4.696 2.69e-06
+championSivir                     14.6745     5.7893   2.535 0.011270
+championSyndra                     7.9764     2.7928   2.856 0.004301
+championTahm Kench               -17.8112     4.0817  -4.364 1.30e-05
+championTaliyah                   13.7594     2.6960   5.104 3.41e-07
+championTalon                     -1.4202     4.5396  -0.313 0.754411
+championTaric                    -33.4678     5.1672  -6.477 9.91e-11
+championThresh                   -21.4544     3.8876  -5.519 3.52e-08
+championTristana                   9.9342     4.7444   2.094 0.036300
+championTwitch                    11.7098     5.0436   2.322 0.020273
+championVarus                     -5.4733     4.6016  -1.189 0.234305
+championViktor                    14.9766     3.3179   4.514 6.46e-06
+championVladimir                   4.8998     3.6632   1.338 0.181081
+championXayah                      5.2647     4.6749   1.126 0.260132
+championZac                      -17.6603     4.5437  -3.887 0.000102
+championZyra                      27.4834     4.0809   6.735 1.76e-11
+positionJungle                   180.3544    12.6926  14.209  < 2e-16
+positionMiddle                    70.8624    12.3443   5.740 9.78e-09
+positionSupport                  253.5973    12.7727  19.855  < 2e-16
+positionTop                      180.1794    12.6572  14.235  < 2e-16
+log(gamelength)                  116.5960     2.3476  49.666  < 2e-16
+poly(otherkillshare, 3)1        -503.4892    19.4821 -25.844  < 2e-16
+poly(otherkillshare, 3)2        -215.7755    19.1046 -11.294  < 2e-16
+poly(otherkillshare, 3)3         288.6072    19.0266  15.169  < 2e-16
+positionJungle:log(gamelength)   -59.0413     3.3219 -17.773  < 2e-16
+positionMiddle:log(gamelength)   -20.1615     3.3233  -6.067 1.37e-09
+positionSupport:log(gamelength)  -83.8188     3.3319 -25.156  < 2e-16
+positionTop:log(gamelength)      -51.9547     3.3192 -15.653  < 2e-16
+                                   
+(Intercept)                     ***
+championAlistar                 ***
+championAshe                       
+championBard                       
+championBlitzcrank              ** 
+championBraum                   ***
+championCaitlyn                 .  
+championCamille                    
+championCassiopeia                 
+championCho'gath                   
+championCorki                   ***
+championEkko                       
+championElise                      
+championEzreal                  ** 
+championFiora                   .  
+championGalio                   ***
+championGnar                       
+championGragas                  ** 
+championGraves                     
+championIvern                   ***
+championJanna                   ***
+championJarvan IV               ***
+championJax                        
+championJayce                   ***
+championJhin                       
+championKalista                    
+championKarma                      
+championKassadin                .  
+championKennen                     
+championKha'zix                    
+championKled                    .  
+championKog'Maw                 ***
+championLeBlanc                 ***
+championLee Sin                 ***
+championLucian                  *  
+championLulu                    ***
+championMalzahar                ***
+championMaokai                     
+championMorgana                    
+championNami                    ** 
+championNautilus                ***
+championNidalee                 *  
+championOlaf                       
+championOrianna                    
+championRakan                   ***
+championRek'Sai                 ** 
+championRenekton                ** 
+championRengar                     
+championRumble                  ***
+championSejuani                 ***
+championShen                    ***
+championSivir                   *  
+championSyndra                  ** 
+championTahm Kench              ***
+championTaliyah                 ***
+championTalon                      
+championTaric                   ***
+championThresh                  ***
+championTristana                *  
+championTwitch                  *  
+championVarus                      
+championViktor                  ***
+championVladimir                   
+championXayah                      
+championZac                     ***
+championZyra                    ***
+positionJungle                  ***
+positionMiddle                  ***
+positionSupport                 ***
+positionTop                     ***
+log(gamelength)                 ***
+poly(otherkillshare, 3)1        ***
+poly(otherkillshare, 3)2        ***
+poly(otherkillshare, 3)3        ***
+positionJungle:log(gamelength)  ***
+positionMiddle:log(gamelength)  ***
+positionSupport:log(gamelength) ***
+positionTop:log(gamelength)     ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 18.79 on 8031 degrees of freedom
+Multiple R-squared:  0.7372,	Adjusted R-squared:  0.7347 
+F-statistic: 292.6 on 77 and 8031 DF,  p-value: < 2.2e-16
+
