@@ -14,7 +14,7 @@ teamgold15 <- read_xlsx(paste0("Data/", summerfile) %>% here,
   filter(player=="Team") %>%
   select(gameid, league, team, gdat15, result)
 
-savefolder <- here("Output/lead_deficit_15mins/")
+savefolder <- here("LeadDeficit_Numbers_w_Context/Output/")
 
 #---------------------------------------------------Quick plot of distributions
 #find leagues with max # games per team > 20

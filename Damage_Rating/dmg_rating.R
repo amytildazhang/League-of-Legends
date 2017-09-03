@@ -727,35 +727,6 @@ summary(fit)
 #LPRE-specific fit and graphs
 source("LPRE.R")
 
-wo_influential <- matchdata[matchdata$dmgtochamps < 25000,]
-xmatrix <- model.matrix(dmgtochamps ~ champion*goldspent + position*goldspent, 
-                        data = wo_influential)
-
-beta0 = lm(log(wo_influential$dmgtochamps)~xmatrix-1)$coeff
-temp = findroot(wo_influential$dmgtochamps,xmatrix,beta0)
-
-fitted <- exp(xmatrix %*% temp$beta.hat)
-residuals <- (wo_influential$dmgtochamps - fitted)
-
-(residuals/fitted)^2 %>% mean
-
-xpredmatrix <- model.matrix(dmgtochamps ~ champion*goldspent + position*(goldspent), 
-                            data = matchdata)
-beta0 = lm(log(matchdata$dmgtochamps)~xpredmatrix-1)$coeff
-temp = findroot(matchdata$dmgtochamps,xpredmatrix,beta0)
-
-matchdata$predicted <- exp(xpredmatrix %*% temp$beta.hat)
-matchdata$resid <- (matchdata$dmgtochamps - matchdata$predicted)/matchdata$predicted
-fitted <- exp(xpredmatrix %*% temp$beta.hat)
-residuals <- (matchdata$dmgtochamps - fitted)
-(residuals/fitted)^2 %>% mean
-
-plot(residuals/fitted ~ log(fitted))
-abline(h = 0)
-plot(residuals/matchdata$dmgtochamps ~ log(fitted))
-
-
-
 xpredmatrix <- model.matrix(dmgtochamps ~ champion*log(goldspent) + position*log(goldspent), 
                             data = matchdata)
 beta0 = lm(log(matchdata$dmgtochamps)~xpredmatrix-1)$coeff
@@ -772,20 +743,13 @@ abline(h = 0)
 plot(residuals/matchdata$dmgtochamps ~ log(fitted))
 
 
-
-ggplot(matchdata, aes(x = league, y = resid)) +
-    geom_violin(draw_quantiles = c(0.25, 0.5, 0.75)) +
-    theme_minimal() +
-    facet_wrap(~position)
-
-
 purple <- "#85016E"
 red <- "#FF020A"
 blue <- "#0980B2"
 yellow <- "#C4A20A"
 green <- "#006112"
 
-pdf(paste0(savefolder, "LPRE/Diagnostics/diagnostics.pdf"))
+pdf(paste0(savefolder, "LPRE_result/Diagnostics/diagnostics.pdf"))
 par(mfrow = c(1,1))
 hist(residuals/fitted.values)
 
@@ -840,7 +804,7 @@ predictions <- map2_df(champ_pos$champion, champ_pos$position, function(champ, p
         position = pos
     )  })
 
-xpredmatrix <- model.matrix(~ champion*log(goldspent) + position*log(goldspent), 
+xpredmatrix <- model.matrix(~ champion*log(goldspent) + position*log(goldspent) + result, 
                             data = predictions)
 predictions$predicted <- exp(xpredmatrix %*% temp$beta.hat)
 predictions$resid <- (predictions$predicted - predictions$predicted)/predictions$predicted
@@ -855,14 +819,14 @@ walk(c("Top", "Jungle", "Middle", "ADC", "Support"), function(pos){
     matchdata %>% filter(position == pos) %>%
         ggplot(aes(x = goldspent, y = dmgtochamps)) +
         geom_point(aes(color = factor(result)), alpha = 0.3) +
-        geom_line(aes(y = predicted),
+        geom_line(aes(y = predicted, color=factor(result), group=factor(result)),
                   data=predictions %>% filter(position == pos)) +
         scale_color_manual(values = c(blue, red)) +
         facet_wrap(~champion) +
         theme_minimal() +
         theme(axis.text = element_text(size = 8)) 
     
-    ggsave(paste0(savefolder, "LPRE/Diagnostics/gold_prediction_graph_", pos, ".png"),
+    ggsave(paste0(savefolder, "LPRE_result/Diagnostics/gold_prediction_graph_", pos, ".png"),
            height = ceiling(n_champs/4)*1.5, width = 10)  
     
     ggplot(matchdata %>% filter(position == pos), 
@@ -875,7 +839,7 @@ walk(c("Top", "Jungle", "Middle", "ADC", "Support"), function(pos){
         theme_minimal() + 
         theme(axis.text = element_text(size = 8))
     
-    ggsave(paste0(savefolder, "LPRE/Diagnostics/residual_graph_", pos, ".png"),
+    ggsave(paste0(savefolder, "LPRE_result/Diagnostics/residual_graph_", pos, ".png"),
            height = ceiling(n_champs/4)*1.5, width = 8.5)  
     
 }
@@ -883,6 +847,19 @@ walk(c("Top", "Jungle", "Middle", "ADC", "Support"), function(pos){
 
 )
 
+
+sink(paste0(savefolder, "LPRE_result/Diagnostics/fit_summary.txt"))
+temp$beta.hat
+sink()
+
+compare_result <- predictions %>%
+    mutate(
+        result = ifelse(result > 0, "win", "loss")
+    ) %>%
+    spread(result, predicted) %>%
+    mutate(
+        diff = win - loss,
+        percent_diff = diff/loss)
 
 
 adj_data <- matchdata %>% 
@@ -895,12 +872,12 @@ walk(unique(adj_data$league), function(lg){
     a <- adj_data %>% filter(league  == lg) 
     a %>%
         select(league, team, player, champion, dmgtochamps, predicted, goldspent) %>%
-        write_csv(paste0(savefolder, "LPRE/Rankings/", lg, "_dmg_vals.csv"))
+        write_csv(paste0(savefolder, "LPRE_result/Rankings/", lg, "_dmg_vals.csv"))
     a %>%
         group_by(position, team, player) %>%
         summarise(dmg_performance = round(mean(resid)*100, digits = 2)) %>%
         arrange(position, desc(dmg_performance)) %>%
-        write_csv(paste0(savefolder, "LPRE/Rankings/", lg, "_dmg_ratings.csv"))
+        write_csv(paste0(savefolder, "LPRE_result/Rankings/", lg, "_dmg_ratings.csv"))
     
     cd <- a %>% filter(n_games >=  8) %>%
         group_by(player, n_games, position) %>%
@@ -932,7 +909,7 @@ walk(unique(adj_data$league), function(lg){
         facet_wrap(~position) +
         theme_minimal() +
         theme(legend.position = "bottom")
-    ggsave(paste0(savefolder, "LPRE/Rankings/", lg, "_meanvsmedian_graph.png"),
+    ggsave(paste0(savefolder, "LPRE_result/Rankings/", lg, "_meanvsmedian_graph.png"),
            width = 10, height = 7.5)
     
     
@@ -947,7 +924,7 @@ walk(unique(adj_data$league), function(lg){
         facet_wrap(~position, scales = "free_x") +
         theme_minimal() +
         theme(legend.position = "bottom")
-    ggsave(paste0(savefolder, "LPRE/Rankings/", lg, "graph_byposition.png"),
+    ggsave(paste0(savefolder, "LPRE_result/Rankings/", lg, "graph_byposition.png"),
            width = 10, height = 7.5)
     
     
@@ -977,7 +954,7 @@ walk(unique(adj_data$league), function(lg){
         
         ncols <- ceiling(n_champs/3)
         
-        ggsave(paste0(savefolder, "LPRE/Rankings/", lg, 
+        ggsave(paste0(savefolder, "LPRE_result/Rankings/", lg, 
                       "_breakdown_", pos, ".png"),
                width = ncols * 2 + 1, height = 6)
         
