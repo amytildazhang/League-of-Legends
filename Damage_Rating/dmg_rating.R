@@ -43,7 +43,7 @@ matchdata <- here("Data/") %>%
 savefolder <- here("Damage_Rating/Output/")
 
 
-#---------------------------------------------------filter champions
+#---------------------------------------------------filter champions based on games played
 #excluded champions
 excluded_champs <- matchdata %>% group_by(position, player, champion) %>%
     summarise(n_games = n()) %>%
@@ -156,7 +156,7 @@ r_models <- c( #regression models that are being considered
 )
 
 
-#choose model based on performance over test set
+#compare performance over test set
 set.seed(715)
 train_idx <- sample.int(nrow(matchdata), floor(0.7*nrow(matchdata)))
 test_idx <- setdiff(1:nrow(matchdata), train_idx)
@@ -207,7 +207,7 @@ par(mfrow = c(2,2))
 plot(fit, ask = F)
 
 
-
+#output graphs and files that go in the "Output" folder for each model
 output_diagnostics <- function(i, matchdata, r_models){
     red <- "#FF020A"
     blue <- "#0980B2"
@@ -525,8 +525,8 @@ output_diagnostics(14, matchdata, r_models)
 
 
 
-#----------------------more sanity checks
 
+#output graphs and files put out by model in the "Rankings" folder
 output_rankings <- function(i, matchdata, r_models){
     purple <- "#85016E"
     red <- "#FF020A"
@@ -724,7 +724,7 @@ summary(fit)
 
 
 #------------------Squared Relative Error, Newton-raphson------------------#
-
+#LPRE-specific fit and graphs
 source("LPRE.R")
 
 wo_influential <- matchdata[matchdata$dmgtochamps < 25000,]

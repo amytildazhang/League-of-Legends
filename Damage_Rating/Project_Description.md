@@ -66,13 +66,15 @@ Of course, what is the point of all of this if we don't produce rankings? The gr
 
 ![NA LCS damage rating by position](Output/LPRE/Rankings/NALCSgraph_byposition.png)
 
-In my experience playing with this model and various others that I tried, is that values are very sensitive to model fit. Thus I used median instead of average. I also encourage anyone who's reading this to not put too much stock into the *order* itself (yes, I know it's a ranking, but still) and instead to look at clusters. For example, in the jungle, Svenskeren, Dardoch, and Contractz can be seen as one cluster--insead of separating into 1. Svenskeren, 2. Dardoch, and 3. Contractz, it's more valuable to note that they're very close to one another and thus form the top-performing cluster. No model is perfect, so when the estimates are close, it is better to not put too much stock into their differences.
+In my experience playing with this model and various others that I tried, is that values are very sensitive to model fit. Thus I used median instead of average. I also encourage anyone who's reading this to not put too much stock in the *order* itself (yes, I know it's a ranking, but still) and instead to look at clusters. For example, in the jungle, Svenskeren, Dardoch, and Contractz can be seen as one cluster--insead of separating into 1. Svenskeren, 2. Dardoch, and 3. Contractz, it's more valuable to note that they're very close to one another and thus form the top-performing cluster. No model is perfect, so when the estimates are close, it is better to not put too much stock into their differences.
 
 (A more robust way of presenting this would be to calculate some form of standard error, which I leave for future work. :smiley:)
 
 The remainder of the graphs are in `Output/LPRE/Rankings/[league name]graph_byposition.png`. 
 
-But the median isn't all we would be interested in, is it? We would also like to know which champions the players tend to play, how often, and how well they perform on them.
+If anything, these rankings should be seen as a sanity check of the model--are they reasonable? Are any surprising differences from your expectation easily explainable? 
+
+That being said, the median isn't all that interesting, is it? We would also like to know which champions the players tend to play, how often, and how well they perform on them.
 
 ![NA LCS ADC damage breakdown by champion](Output/LPRE/Rankings/NALCS_breakdown_ADC.png)
 
