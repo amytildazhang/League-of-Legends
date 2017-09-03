@@ -1,16 +1,18 @@
 position,team,player,dmg_performance
-ADC,Fnatic,Rekkles,30.66
-ADC,Mysterious Monkeys,Yuuki60,8.56
-ADC,Roccat,Hjarnan,8.51
-ADC,G2 Esports,Zven,0.57
-ADC,Splyce,Kobbe,0.27
-ADC,Misfits,Hans Sama,-3.48
-ADC,Ninjas in Pyjamas,HeaQ,-5.65
-ADC,Unicorns of Love,Samux,-5.86
-ADC,H2K,Nuclear,-7.27
-ADC,Vitality,Steeelback,-17.82
-ADC,Giants,HeaQ,-26.99
-ADC,Origen,Tabzz,-34.59
+Top,Mysterious Monkeys,Jisu,17.54
+Top,Fnatic,sOAZ,9.99
+Top,Unicorns of Love,Vizicsacsi,9.68
+Top,Splyce,Wunder,8.49
+Top,Mysterious Monkeys,Kikis,6.3
+Top,G2 Esports,Expect,0.22
+Top,Misfits,Alphari,-2.23
+Top,Vitality,Cabochard,-2.9
+Top,Ninjas in Pyjamas,Profit,-3.3
+Top,H2K,Odoamne,-5.16
+Top,Roccat,Phaxi,-10.22
+Top,G2 Esports,Send0o,-11.96
+Top,Giants,Flaxxish,-24.19
+Top,Origen,Satorius,-36.46
 Jungle,Unicorns of Love,Xerxe,19.59
 Jungle,Roccat,Maxlore,13.28
 Jungle,G2 Esports,Trick,10.91
@@ -40,6 +42,18 @@ Middle,Mysterious Monkeys,CozQ,-3.5
 Middle,Unicorns of Love,Exileh,-6.56
 Middle,Ninjas in Pyjamas,Nagne,-9.41
 Middle,Origen,Naehyun,-36.54
+ADC,Fnatic,Rekkles,30.66
+ADC,Mysterious Monkeys,Yuuki60,8.56
+ADC,Roccat,Hjarnan,8.51
+ADC,G2 Esports,Zven,0.57
+ADC,Splyce,Kobbe,0.27
+ADC,Misfits,Hans Sama,-3.48
+ADC,Ninjas in Pyjamas,HeaQ,-5.65
+ADC,Unicorns of Love,Samux,-5.86
+ADC,H2K,Nuclear,-7.27
+ADC,Vitality,Steeelback,-17.82
+ADC,Giants,HeaQ,-26.99
+ADC,Origen,Tabzz,-34.59
 Support,Splyce,Mikyx,20.33
 Support,Origen,xPeke,13.24
 Support,Giants,HusTlin,12.47
@@ -53,17 +67,3 @@ Support,Misfits,IgNar,-6.72
 Support,Roccat,Wadid,-7.21
 Support,G2 Esports,mithy,-7.28
 Support,Vitality,Vander,-12.91
-Top,Mysterious Monkeys,Jisu,17.54
-Top,Fnatic,sOAZ,9.99
-Top,Unicorns of Love,Vizicsacsi,9.68
-Top,Splyce,Wunder,8.49
-Top,Mysterious Monkeys,Kikis,6.3
-Top,G2 Esports,Expect,0.22
-Top,Misfits,Alphari,-2.23
-Top,Vitality,Cabochard,-2.9
-Top,Ninjas in Pyjamas,Profit,-3.3
-Top,H2K,Odoamne,-5.16
-Top,Roccat,Phaxi,-10.22
-Top,G2 Esports,Send0o,-11.96
-Top,Giants,Flaxxish,-24.19
-Top,Origen,Satorius,-36.46

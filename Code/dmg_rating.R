@@ -1153,7 +1153,7 @@ green <- "#006112"
        geom_line(aes(y = predicted),
                  data=predictions %>% filter(position == pos)) +
        scale_color_manual(values = c(blue, red)) +
-       facet_wrap(~champion, scales = "free_y") +
+       facet_wrap(~champion) +
        theme_minimal() +
        theme(axis.text = element_text(size = 8)) 
       
@@ -1278,3 +1278,5 @@ green <- "#006112"
       
 })
 })
+
+ 

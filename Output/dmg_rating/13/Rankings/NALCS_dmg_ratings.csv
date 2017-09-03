@@ -1,20 +1,18 @@
 position,team,player,dmg_performance
-ADC,Team Liquid,Piglet,12.1
-ADC,Team SoloMid,Doublelift,8.15
-ADC,Counter Logic Gaming,Stixxay,4.35
-ADC,Immortals,Cody Sun,3.21
-ADC,Flyquest,Altec,3.15
-ADC,Phoenix1,Arrow,3.13
-ADC,FlyQuest,WildTurtle,2.81
-ADC,Dignitas,Altec,1.94
-ADC,EnVyUs,Apollo,1.47
-ADC,Cloud9,Sneaky,0.75
-ADC,Echo Fox,Keith,-4.14
-ADC,Team Liquid,Doublelift,-10.16
-ADC,Dignitas,LOD,-11.96
-ADC,Echo Fox,Mash,-16.91
-ADC,Counter Logic Gaming,aphromoo,-37.56
-ADC,Team SoloMid,WildTurtle,-41.03
+Top,Team SoloMid,Hauntzer,28.75
+Top,Cloud9,Impact,12.85
+Top,Cloud9,Ray,9.27
+Top,Dignitas,Ssumday,8.84
+Top,Team Liquid,Lourlo,6.43
+Top,Counter Logic Gaming,Darshan,5.41
+Top,Immortals,Flame,4.1
+Top,EnVyUs,Seraph,2.45
+Top,Phoenix1,zig,0.55
+Top,Echo Fox,Brandini,-1.45
+Top,FlyQuest,Balls,-4.47
+Top,Phoenix1,Allorim,-4.51
+Top,Echo Fox,Looper,-6.58
+Top,Flyquest,Balls,-25.37
 Jungle,Immortals,Dardoch,49
 Jungle,Cloud9,Contractz,17.02
 Jungle,Team Liquid,Inori,13.03
@@ -53,6 +51,22 @@ Middle,Phoenix1,Pirean,-4.89
 Middle,Team Liquid,Piglet,-6.53
 Middle,Echo Fox,Damonte,-8.32
 Middle,Team Liquid,Slooshi,-16.7
+ADC,Team Liquid,Piglet,12.1
+ADC,Team SoloMid,Doublelift,8.15
+ADC,Counter Logic Gaming,Stixxay,4.35
+ADC,Immortals,Cody Sun,3.21
+ADC,Flyquest,Altec,3.15
+ADC,Phoenix1,Arrow,3.13
+ADC,FlyQuest,WildTurtle,2.81
+ADC,Dignitas,Altec,1.94
+ADC,EnVyUs,Apollo,1.47
+ADC,Cloud9,Sneaky,0.75
+ADC,Echo Fox,Keith,-4.14
+ADC,Team Liquid,Doublelift,-10.16
+ADC,Dignitas,LOD,-11.96
+ADC,Echo Fox,Mash,-16.91
+ADC,Counter Logic Gaming,aphromoo,-37.56
+ADC,Team SoloMid,WildTurtle,-41.03
 Support,Immortals,Olleh,33.64
 Support,Dignitas,Adrian,22.83
 Support,FlyQuest,LemonNation,14.63
@@ -70,17 +84,3 @@ Support,Cloud9,Smoothie,-10.38
 Support,Dignitas,Xpecial,-12.15
 Support,Echo Fox,Gate,-17.32
 Support,Phoenix1,Stunt,-62.27
-Top,Team SoloMid,Hauntzer,28.75
-Top,Cloud9,Impact,12.85
-Top,Cloud9,Ray,9.27
-Top,Dignitas,Ssumday,8.84
-Top,Team Liquid,Lourlo,6.43
-Top,Counter Logic Gaming,Darshan,5.41
-Top,Immortals,Flame,4.1
-Top,EnVyUs,Seraph,2.45
-Top,Phoenix1,zig,0.55
-Top,Echo Fox,Brandini,-1.45
-Top,FlyQuest,Balls,-4.47
-Top,Phoenix1,Allorim,-4.51
-Top,Echo Fox,Looper,-6.58
-Top,Flyquest,Balls,-25.37

@@ -1,20 +1,18 @@
 position,team,player,dmg_performance
-ADC,Team SoloMid,Doublelift,14.31
-ADC,Flyquest,Altec,10.87
-ADC,Immortals,Cody Sun,10.75
-ADC,Dignitas,Altec,8.04
-ADC,Team Liquid,Piglet,6.92
-ADC,Counter Logic Gaming,Stixxay,6.16
-ADC,Cloud9,Sneaky,5.04
-ADC,FlyQuest,WildTurtle,3.38
-ADC,Phoenix1,Arrow,-0.98
-ADC,EnVyUs,Apollo,-2.15
-ADC,Echo Fox,Keith,-2.72
-ADC,Team Liquid,Doublelift,-6.23
-ADC,Counter Logic Gaming,aphromoo,-10.83
-ADC,Echo Fox,Mash,-16.19
-ADC,Dignitas,LOD,-17.88
-ADC,Team SoloMid,WildTurtle,-24.53
+Top,Team SoloMid,Hauntzer,22.23
+Top,Cloud9,Impact,21.5
+Top,Immortals,Flame,11.24
+Top,Cloud9,Ray,7.3
+Top,Team Liquid,Lourlo,5.83
+Top,Echo Fox,Brandini,4.16
+Top,Dignitas,Ssumday,3.4
+Top,Counter Logic Gaming,Darshan,2.82
+Top,Phoenix1,zig,0.07
+Top,EnVyUs,Seraph,0.05
+Top,Phoenix1,Allorim,-4.31
+Top,Echo Fox,Looper,-4.79
+Top,FlyQuest,Balls,-9.48
+Top,Flyquest,Balls,-19.76
 Jungle,Immortals,Dardoch,52.48
 Jungle,Team Liquid,Inori,33.24
 Jungle,Counter Logic Gaming,Xmithie,28.7
@@ -53,6 +51,22 @@ Middle,EnVyUs,Pirean,-5.32
 Middle,Team Liquid,Goldenglue,-5.41
 Middle,Echo Fox,Damonte,-13.16
 Middle,Team Liquid,Slooshi,-16.12
+ADC,Team SoloMid,Doublelift,14.31
+ADC,Flyquest,Altec,10.87
+ADC,Immortals,Cody Sun,10.75
+ADC,Dignitas,Altec,8.04
+ADC,Team Liquid,Piglet,6.92
+ADC,Counter Logic Gaming,Stixxay,6.16
+ADC,Cloud9,Sneaky,5.04
+ADC,FlyQuest,WildTurtle,3.38
+ADC,Phoenix1,Arrow,-0.98
+ADC,EnVyUs,Apollo,-2.15
+ADC,Echo Fox,Keith,-2.72
+ADC,Team Liquid,Doublelift,-6.23
+ADC,Counter Logic Gaming,aphromoo,-10.83
+ADC,Echo Fox,Mash,-16.19
+ADC,Dignitas,LOD,-17.88
+ADC,Team SoloMid,WildTurtle,-24.53
 Support,Counter Logic Gaming,Joey,48.37
 Support,Immortals,Olleh,45.76
 Support,Dignitas,Adrian,26.79
@@ -70,17 +84,3 @@ Support,Echo Fox,Gate,-7.81
 Support,Phoenix1,Xpecial,-8.78
 Support,Cloud9,Smoothie,-9.16
 Support,Phoenix1,Stunt,-67.91
-Top,Team SoloMid,Hauntzer,22.23
-Top,Cloud9,Impact,21.5
-Top,Immortals,Flame,11.24
-Top,Cloud9,Ray,7.3
-Top,Team Liquid,Lourlo,5.83
-Top,Echo Fox,Brandini,4.16
-Top,Dignitas,Ssumday,3.4
-Top,Counter Logic Gaming,Darshan,2.82
-Top,Phoenix1,zig,0.07
-Top,EnVyUs,Seraph,0.05
-Top,Phoenix1,Allorim,-4.31
-Top,Echo Fox,Looper,-4.79
-Top,FlyQuest,Balls,-9.48
-Top,Flyquest,Balls,-19.76

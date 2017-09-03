@@ -1,21 +1,19 @@
 position,team,player,dmg_performance
-ADC,Hong Kong Attitude,GodKwai,21.37
-ADC,Flash Wolves,Madnesss,15.48
-ADC,J Team,Bebe,11.89
-ADC,Flash Wolves,Betty,10.83
-ADC,AHQ e-Sports Club,An,7.53
-ADC,J Team,BeBe,7.13
-ADC,Hong Kong Attitude,Unified,6.7
-ADC,Fire Ball,Unified,4.85
-ADC,Wayi Spider,Breeze,1.34
-ADC,Raise Gaming,LilV,-3.14
-ADC,Hong Kong Esports,GodKwai,-3.67
-ADC,Machi 17,Dee,-7.08
-ADC,Fire Ball,Enzz,-7.62
-ADC,AHQ e-Sports Club,LBB,-9.29
-ADC,Hong Kong Attitude,DANDAN,-12.84
-ADC,Raise Gaming,Ran,-18.77
-ADC,eXtreme Gamers,LBB,-22.9
+Top,J Team,Morning,24.35
+Top,AHQ e-Sports Club,Ziv,15.13
+Top,Hong Kong Esports,MapleSnow,11.81
+Top,Raise Gaming,Pk,10.23
+Top,Hong Kong Attitude,MapleSnow,9.44
+Top,Wayi Spider,Nexus,8.33
+Top,Hong Kong Attitude,Riris,6.57
+Top,Flash Wolves,MMD,3.87
+Top,Fire Ball,Ninuo,-2.21
+Top,eXtreme Gamers,Nexus,-3.55
+Top,J Team,Rest,-3.8
+Top,Machi 17,BoBo,-10.99
+Top,Machi 17,3z,-11.58
+Top,Wayi Spider,Rins,-23.77
+Top,Flash Wolves,Moonblackk,-31.5
 Jungle,J Team,Alex,24.6
 Jungle,Flash Wolves,Karsa,14.63
 Jungle,Wayi Spider,Epic,8.64
@@ -51,6 +49,23 @@ Middle,Fire Ball,KuKu,-16.19
 Middle,Fire Ball,Wind,-27.22
 Middle,Hong Kong Esports,KuKu,-32.04
 Middle,eXtreme Gamers,Chingz,-51.31
+ADC,Hong Kong Attitude,GodKwai,21.37
+ADC,Flash Wolves,Madnesss,15.48
+ADC,J Team,Bebe,11.89
+ADC,Flash Wolves,Betty,10.83
+ADC,AHQ e-Sports Club,An,7.53
+ADC,J Team,BeBe,7.13
+ADC,Hong Kong Attitude,Unified,6.7
+ADC,Fire Ball,Unified,4.85
+ADC,Wayi Spider,Breeze,1.34
+ADC,Raise Gaming,LilV,-3.14
+ADC,Hong Kong Esports,GodKwai,-3.67
+ADC,Machi 17,Dee,-7.08
+ADC,Fire Ball,Enzz,-7.62
+ADC,AHQ e-Sports Club,LBB,-9.29
+ADC,Hong Kong Attitude,DANDAN,-12.84
+ADC,Raise Gaming,Ran,-18.77
+ADC,eXtreme Gamers,LBB,-22.9
 Support,Raise Gaming,Koala,16.47
 Support,Wayi Spider,Zest,10.92
 Support,Flash Wolves,SwordArt,9.85
@@ -62,18 +77,3 @@ Support,Wayi Spider,K,-2.3
 Support,Fire Ball,SkuLL,-2.71
 Support,eXtreme Gamers,SuKi,-4.23
 Support,Machi 17,Dreamer,-4.99
-Top,J Team,Morning,24.35
-Top,AHQ e-Sports Club,Ziv,15.13
-Top,Hong Kong Esports,MapleSnow,11.81
-Top,Raise Gaming,Pk,10.23
-Top,Hong Kong Attitude,MapleSnow,9.44
-Top,Wayi Spider,Nexus,8.33
-Top,Hong Kong Attitude,Riris,6.57
-Top,Flash Wolves,MMD,3.87
-Top,Fire Ball,Ninuo,-2.21
-Top,eXtreme Gamers,Nexus,-3.55
-Top,J Team,Rest,-3.8
-Top,Machi 17,BoBo,-10.99
-Top,Machi 17,3z,-11.58
-Top,Wayi Spider,Rins,-23.77
-Top,Flash Wolves,Moonblackk,-31.5

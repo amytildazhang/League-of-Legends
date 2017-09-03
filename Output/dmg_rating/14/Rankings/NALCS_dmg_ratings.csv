@@ -1,20 +1,18 @@
 position,team,player,dmg_performance
-ADC,Team Liquid,Piglet,19.68
-ADC,Team SoloMid,Doublelift,15.25
-ADC,FlyQuest,WildTurtle,14.11
-ADC,EnVyUs,Apollo,13.99
-ADC,Counter Logic Gaming,Stixxay,12.74
-ADC,Phoenix1,Arrow,8.13
-ADC,Flyquest,Altec,6.54
-ADC,Echo Fox,Keith,6.28
-ADC,Immortals,Cody Sun,5.71
-ADC,Dignitas,LOD,5.27
-ADC,Cloud9,Sneaky,5.12
-ADC,Dignitas,Altec,-1.2
-ADC,Team Liquid,Doublelift,-13.1
-ADC,Echo Fox,Mash,-20.9
-ADC,Counter Logic Gaming,aphromoo,-43.1
-ADC,Team SoloMid,WildTurtle,-45.5
+Top,Team SoloMid,Hauntzer,25.14
+Top,Cloud9,Ray,14.55
+Top,EnVyUs,Seraph,8.59
+Top,Dignitas,Ssumday,8.52
+Top,Counter Logic Gaming,Darshan,5.58
+Top,Cloud9,Impact,4.29
+Top,Team Liquid,Lourlo,3.92
+Top,Phoenix1,zig,1.55
+Top,Echo Fox,Looper,1.11
+Top,Immortals,Flame,0.25
+Top,FlyQuest,Balls,-3.49
+Top,Echo Fox,Brandini,-13.27
+Top,Flyquest,Balls,-24.06
+Top,Phoenix1,Allorim,-39.89
 Jungle,Immortals,Dardoch,71.17
 Jungle,Team Liquid,Inori,63.98
 Jungle,Counter Logic Gaming,Xmithie,40.6
@@ -53,6 +51,22 @@ Middle,Echo Fox,Damonte,-4.97
 Middle,Team Liquid,Piglet,-11.24
 Middle,Team Liquid,Slooshi,-14.09
 Middle,Phoenix1,Pirean,-18.68
+ADC,Team Liquid,Piglet,19.68
+ADC,Team SoloMid,Doublelift,15.25
+ADC,FlyQuest,WildTurtle,14.11
+ADC,EnVyUs,Apollo,13.99
+ADC,Counter Logic Gaming,Stixxay,12.74
+ADC,Phoenix1,Arrow,8.13
+ADC,Flyquest,Altec,6.54
+ADC,Echo Fox,Keith,6.28
+ADC,Immortals,Cody Sun,5.71
+ADC,Dignitas,LOD,5.27
+ADC,Cloud9,Sneaky,5.12
+ADC,Dignitas,Altec,-1.2
+ADC,Team Liquid,Doublelift,-13.1
+ADC,Echo Fox,Mash,-20.9
+ADC,Counter Logic Gaming,aphromoo,-43.1
+ADC,Team SoloMid,WildTurtle,-45.5
 Support,Immortals,Olleh,38.59
 Support,Dignitas,Xpecial,27.01
 Support,EnVyUs,Hakuho,25.52
@@ -70,17 +84,3 @@ Support,Phoenix1,Xpecial,-5.5
 Support,Cloud9,Smoothie,-7.81
 Support,Echo Fox,Gate,-9.47
 Support,Phoenix1,Stunt,-55.58
-Top,Team SoloMid,Hauntzer,25.14
-Top,Cloud9,Ray,14.55
-Top,EnVyUs,Seraph,8.59
-Top,Dignitas,Ssumday,8.52
-Top,Counter Logic Gaming,Darshan,5.58
-Top,Cloud9,Impact,4.29
-Top,Team Liquid,Lourlo,3.92
-Top,Phoenix1,zig,1.55
-Top,Echo Fox,Looper,1.11
-Top,Immortals,Flame,0.25
-Top,FlyQuest,Balls,-3.49
-Top,Echo Fox,Brandini,-13.27
-Top,Flyquest,Balls,-24.06
-Top,Phoenix1,Allorim,-39.89

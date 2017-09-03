@@ -1,16 +1,23 @@
 position,team,player,dmg_performance
-ADC,KT Rolster,Deft,9.96
-ADC,SK Telecom T1,Bang,9.33
-ADC,Samsung Galaxy,Ruler,7.29
-ADC,Longzhu Gaming,PraY,5.65
-ADC,Afreeca Freecs,Kramer,4.85
-ADC,Jin Air Green Wings,Teddy,3.04
-ADC,ROX Tigers,Sangyoon,1.16
-ADC,MVP,MaHa,0.14
-ADC,Kongdoo Monster,SSol,-4.31
-ADC,Samsung Galaxy,Stitch,-4.78
-ADC,BBQ Olivers,Ghost,-6.8
-ADC,Ever8 Winners,Deul,-8.27
+Top,Longzhu Gaming,Expession,21.77
+Top,Longzhu Gaming,Khan,17.75
+Top,SK Telecom T1,Huni,16.43
+Top,KT Rolster,Smeb,15.37
+Top,MVP,ADD,11.61
+Top,Afreeca Freecs,MaRin,6.36
+Top,Samsung Galaxy,CuVee,4.47
+Top,BBQ Olivers,Crazy,2.71
+Top,Jin Air Green Wings,ikssu,-0.1
+Top,Ever8 Winners,Helper,-1.62
+Top,Ever8 Winners,Kiin,-2.88
+Top,ROX Tigers,Lindarang,-3.28
+Top,Jin Air Green Wings,SoHwan,-4.22
+Top,BBQ Olivers,Part,-4.56
+Top,Longzhu Gaming,Rascal,-5.6
+Top,ROX Tigers,Shy,-5.91
+Top,SK Telecom T1,Profit,-12.54
+Top,SK Telecom T1,Untara,-13.43
+Top,Kongdoo Monster,Roach,-21.37
 Jungle,Longzhu Gaming,Crash,15.45
 Jungle,Jin Air Green Wings,UmTi,3.9
 Jungle,Longzhu Gaming,Cuzz,2.59
@@ -43,6 +50,18 @@ Middle,Jin Air Green Wings,Kuzan,-6.65
 Middle,Ever8 Winners,Cepted,-10.9
 Middle,Kongdoo Monster,Edge,-27.57
 Middle,ROX Tigers,Crow,-37.42
+ADC,KT Rolster,Deft,9.96
+ADC,SK Telecom T1,Bang,9.33
+ADC,Samsung Galaxy,Ruler,7.29
+ADC,Longzhu Gaming,PraY,5.65
+ADC,Afreeca Freecs,Kramer,4.85
+ADC,Jin Air Green Wings,Teddy,3.04
+ADC,ROX Tigers,Sangyoon,1.16
+ADC,MVP,MaHa,0.14
+ADC,Kongdoo Monster,SSol,-4.31
+ADC,Samsung Galaxy,Stitch,-4.78
+ADC,BBQ Olivers,Ghost,-6.8
+ADC,Ever8 Winners,Deul,-8.27
 Support,MVP,Max,15.87
 Support,Afreeca Freecs,TusiN,7.83
 Support,Longzhu Gaming,GorillA,6.96
@@ -57,22 +76,3 @@ Support,Afreeca Freecs,Tusin,-12.14
 Support,Ever8 Winners,Ella,-12.35
 Support,Ever8 Winners,Comeback,-17.78
 Support,BBQ Olivers,Totoro,-18.05
-Top,Longzhu Gaming,Expession,21.77
-Top,Longzhu Gaming,Khan,17.75
-Top,SK Telecom T1,Huni,16.43
-Top,KT Rolster,Smeb,15.37
-Top,MVP,ADD,11.61
-Top,Afreeca Freecs,MaRin,6.36
-Top,Samsung Galaxy,CuVee,4.47
-Top,BBQ Olivers,Crazy,2.71
-Top,Jin Air Green Wings,ikssu,-0.1
-Top,Ever8 Winners,Helper,-1.62
-Top,Ever8 Winners,Kiin,-2.88
-Top,ROX Tigers,Lindarang,-3.28
-Top,Jin Air Green Wings,SoHwan,-4.22
-Top,BBQ Olivers,Part,-4.56
-Top,Longzhu Gaming,Rascal,-5.6
-Top,ROX Tigers,Shy,-5.91
-Top,SK Telecom T1,Profit,-12.54
-Top,SK Telecom T1,Untara,-13.43
-Top,Kongdoo Monster,Roach,-21.37
