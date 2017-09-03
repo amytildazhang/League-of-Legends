@@ -14,3 +14,7 @@ Model descriptions
 
 14:  sqrt(dmgtochamps) ~ champion*factor(result) + position
 	MSE 0.05047778
+
+
+LPRE: champion + position*sqrt(goldspent)
+	MSE 0.115
