@@ -17,6 +17,9 @@ It's a new scene that's only just beginning to develop its own statistics, so it
 
   To help address this, Riot released a new "damage rating" statistic which calculated percent difference from expected damage for each player in each game. The statistic is damage to champs per minute, adjusted for champion, game result, and time spent around enemies. I compare Riot's damage rating to mine and make the argument for why "game result" is a poor adjustment to make, and why "gold spent" should be accounted for.
 
+    - `Project_Description.md` 
+      More detailed description of the damage rating model, my argument, and graphs of output.
+
     - `dmg_rating.R`
       Main code to implement Riot's model vs mine. Outputs graphs and CSV files.
 
@@ -32,6 +35,9 @@ It's a new scene that's only just beginning to develop its own statistics, so it
   League of Legends is a game that often centers around gold. Gold is earned from killing enemies and taking objectives. It is used to equip each champion with stronger items that allow them to kill more enemies and take more objectives--a snowball effect that, when done well, will often earn them the game. One metric that is used to judge a team's skill is the gold difference between teams at given time points of the game--15 minutes or 20 minutes is the most common, as it is late enough into the game that the gold differences have meaning, but still considered to be the "early game," where the game outcome has not been decided yet. 
 
   Occasionally Riot will compare a team's gold lead at 20 minutes to their average. However, because teams often have deficits, this average is not representative of the average gold lead. I show this with a few graphs and, for fun, also compare how well teams within each league are able to snowball their lead or come back from a deficit.
+
+    - `Project_Description.md` 
+      More detailed description of what context is appropriate for answering the question "is this a huge lead?"
 
     - `lead_deficit_15mins.R`
       Code to output graphs in `Output`
