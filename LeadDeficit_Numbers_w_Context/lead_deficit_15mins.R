@@ -1,10 +1,3 @@
-#Riot will occasionally compare the leading team's gold lead at 20 with their 
-#average gold difference at 20. Why is this dumb? Because gold difference at 20
-#is likely to be bimodal, therefore an average doesn't give you any sense of 
-#whether a gold lead is typical for the team or not. It DOES give you a sense if
-#they are ahead or behind more often, and by how much...but that isn't the context
-#that they are presented in. So. Less dumb stats.
-
 library(here)
 library(tidyverse)
 library(readxl)
@@ -37,6 +30,9 @@ teamgold15 <- teamgold15 %>% filter(league %in% include_leagues)
 
 bwidth = 300
 
+
+# save quick plots of all distributions
+# commented out bc they aren't necessary anymore
 # walk(teamgold15$league %>% unique, function(lg){
 #   n_teams <- teamgold15$team[teamgold15$league == lg] %>% unique %>% length
 #   teamgold15 %>% filter(league==lg) %>%
@@ -53,6 +49,7 @@ bwidth = 300
 # 
 
 #---------------------------------------------------Add annotations to graphs
+#team name, average lines
 avg_lines <- teamgold15 %>% group_by(league, team) %>%
   summarise(
     avg=mean(gdat15),
@@ -69,6 +66,7 @@ avg_lines$lty <- avg_lines$averages %>%
   as.character
 
 
+#plot and save graphs with annotations
 walk(teamgold15$league %>% unique, function(lg){
   n_teams <- teamgold15$team[teamgold15$league == lg] %>% unique %>% length
   p <- teamgold15 %>% filter(league==lg) %>%
@@ -127,6 +125,10 @@ team_summaries <- teamgold15 %>%
 write_csv(team_summaries, paste0(savefolder, "team_summary.csv"))
 
 
+
+#------------------------------------------New question:
+#do teams tend to win when ahead and lose when behind? by how much?
+
 yellow <- "#C4A20A"
 red <- "#FF020A"
 
@@ -169,8 +171,7 @@ ggsave(paste0(savefolder, "comparison_winloss_updown.png"),
        width=8, height=6)
 
 
-
-
+#a graph that I was trying out and decided not to use
 team_summaries %>%
   ggplot(aes(x=(lead_avg)/(lead_avg-deficit_avg), 
              # y=(games_ahead)/(games_ahead + games_behind))) +
@@ -200,6 +201,7 @@ team_summaries %>%
                      limits=c(0.2,0.8))
   
 
+#what is average lead/deficit size? Does this contribute to team's behavior for win/loss?
 comparison_lead_deficit <- team_summaries %>%
   ggplot(aes(x=-deficit_avg,
              y=lead_avg)) +
@@ -230,7 +232,7 @@ ggsave(paste0(savefolder, "comparison_lead_deficit.png"),
        width=8, height=6)
 
 
-
+#plot win/loss graph and average lead/deficit graph next to each other
 plot_grid(winloss_updown + facet_wrap(~league, ncol=1, scales="free") +
 
             theme(axis.text.y = element_text(hjust=0)),
