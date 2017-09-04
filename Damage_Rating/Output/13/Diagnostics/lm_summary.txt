@@ -1,0 +1,282 @@
+
+Call:
+lm(formula = r_models[[i]], data = matchdata)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-566.85  -81.69  -12.53   65.32 1121.26 
+
+Coefficients:
+                                   Estimate Std. Error
+(Intercept)                         451.847     24.996
+championAlistar                    -346.461     33.925
+championAshe                        -47.791     27.841
+championBard                       -227.587     40.304
+championBlitzcrank                 -313.155     38.182
+championBraum                      -322.376     28.083
+championCaitlyn                       3.941     28.863
+championCamille                    -132.893     35.081
+championCassiopeia                  -43.261     32.697
+championCho'gath                   -151.379     35.934
+championCorki                       185.585     28.616
+championEkko                       -110.903     45.309
+championElise                      -152.832     27.651
+championEzreal                       82.340     38.653
+championFiora                       -25.918     36.950
+championGalio                       -95.595     29.629
+championGnar                        -48.162     31.137
+championGragas                     -189.502     27.161
+championGraves                     -169.894     30.312
+championIvern                      -327.796     49.420
+championJanna                      -389.337     42.437
+championJarvan IV                  -175.792     27.841
+championJax                        -112.134     40.304
+championJayce                        84.142     33.179
+championJhin                         12.610     30.613
+championKalista                     -66.854     28.650
+championKarma                      -209.056     28.901
+championKassadin                     30.295     38.182
+championKennen                      -31.897     33.726
+championKha'zix                    -173.599     29.422
+championKled                       -111.085     32.697
+championKog'Maw                      66.521     31.544
+championLeBlanc                      61.235     35.934
+championLee Sin                    -260.023     28.182
+championLucian                       -1.685     31.544
+championLulu                       -340.989     29.684
+championMalzahar                    -90.262     42.437
+championMaokai                     -114.642     30.041
+championMorgana                    -221.879     44.246
+championNami                       -283.334     51.226
+championNautilus                   -142.082     35.934
+championNidalee                    -189.437     51.226
+championOlaf                       -196.319     39.710
+championOrianna                     -18.880     27.990
+championRakan                      -320.664     29.373
+championRek'Sai                    -243.569     28.979
+championRenekton                   -124.317     28.650
+championRengar                     -241.792     33.726
+championRumble                       52.119     29.019
+championSejuani                    -266.414     35.633
+championShen                       -143.395     30.173
+championSivir                        15.595     47.863
+championSyndra                        4.399     29.326
+championTahm Kench                 -340.287     30.173
+championTaliyah                     100.460     27.968
+championTalon                       -21.015     47.863
+championTaric                      -372.038     49.420
+championThresh                     -336.138     27.353
+championTristana                    -32.224     31.234
+championTwitch                       45.511     37.333
+championVarus                       -55.506     27.599
+championViktor                       69.381     33.179
+championVladimir                    -18.673     36.252
+championXayah                        19.796     28.863
+championZac                        -247.154     44.246
+championZyra                       -123.594     30.173
+factor(result)1                      55.878     36.590
+championAlistar:factor(result)1     -17.440     48.504
+championAshe:factor(result)1         34.458     40.533
+championBard:factor(result)1        -29.053     56.020
+championBlitzcrank:factor(result)1  -36.580     51.689
+championBraum:factor(result)1       -30.468     40.459
+championCaitlyn:factor(result)1     117.459     41.871
+championCamille:factor(result)1     100.266     48.980
+championCassiopeia:factor(result)1   86.641     45.831
+championCho'gath:factor(result)1     84.811     50.603
+championCorki:factor(result)1        44.282     42.187
+championEkko:factor(result)1        136.491     70.628
+championElise:factor(result)1       -11.431     40.293
+championEzreal:factor(result)1       63.723     56.637
+championFiora:factor(result)1        29.600     53.966
+championGalio:factor(result)1       -57.234     42.778
+championGnar:factor(result)1          4.694     46.128
+championGragas:factor(result)1      -41.232     39.459
+championGraves:factor(result)1        6.166     46.319
+championIvern:factor(result)1        -6.290     67.002
+championJanna:factor(result)1       -45.348     61.355
+championJarvan IV:factor(result)1    44.425     40.186
+championJax:factor(result)1         105.868     61.372
+championJayce:factor(result)1       -20.341     48.685
+championJhin:factor(result)1         26.819     44.744
+championKalista:factor(result)1      28.906     41.355
+championKarma:factor(result)1       -15.083     42.454
+championKassadin:factor(result)1     25.230     54.512
+championKennen:factor(result)1       25.675     51.490
+championKha'zix:factor(result)1      20.304     42.635
+championKled:factor(result)1         34.378     46.004
+championKog'Maw:factor(result)1     171.448     48.518
+championLeBlanc:factor(result)1      95.271     50.313
+championLee Sin:factor(result)1      10.215     40.995
+championLucian:factor(result)1       84.767     46.012
+championLulu:factor(result)1        -23.227     43.851
+championMalzahar:factor(result)1     37.740     57.305
+championMaokai:factor(result)1      -17.627     44.094
+championMorgana:factor(result)1     -68.601     58.919
+championNami:factor(result)1        -64.054     69.038
+championNautilus:factor(result)1     -1.091     49.395
+championNidalee:factor(result)1     128.180     68.345
+championOlaf:factor(result)1        -12.944     59.502
+championOrianna:factor(result)1      76.482     40.340
+championRakan:factor(result)1       -23.845     43.769
+championRek'Sai:factor(result)1     -19.816     43.257
+championRenekton:factor(result)1     18.369     41.804
+championRengar:factor(result)1       34.838     47.914
+championRumble:factor(result)1       36.486     42.230
+championSejuani:factor(result)1      17.998     52.194
+championShen:factor(result)1         -1.582     42.944
+championSivir:factor(result)1       173.067     66.581
+championSyndra:factor(result)1      102.389     42.119
+championTahm Kench:factor(result)1  -37.581     44.124
+championTaliyah:factor(result)1      25.161     40.621
+championTalon:factor(result)1        37.441     68.345
+championTaric:factor(result)1       -46.426     65.821
+championThresh:factor(result)1      -43.784     39.922
+championTristana:factor(result)1    137.219     44.040
+championTwitch:factor(result)1      107.386     51.322
+championVarus:factor(result)1        52.565     40.311
+championViktor:factor(result)1      113.803     50.550
+championVladimir:factor(result)1    101.670     56.027
+championXayah:factor(result)1        57.106     42.185
+championZac:factor(result)1         -50.394     55.821
+championZyra:factor(result)1          2.248     44.124
+                                   t value Pr(>|t|)    
+(Intercept)                         18.077  < 2e-16 ***
+championAlistar                    -10.212  < 2e-16 ***
+championAshe                        -1.717 0.086098 .  
+championBard                        -5.647 1.69e-08 ***
+championBlitzcrank                  -8.202 2.74e-16 ***
+championBraum                      -11.479  < 2e-16 ***
+championCaitlyn                      0.137 0.891405    
+championCamille                     -3.788 0.000153 ***
+championCassiopeia                  -1.323 0.185839    
+championCho'gath                    -4.213 2.55e-05 ***
+championCorki                        6.485 9.38e-11 ***
+championEkko                        -2.448 0.014398 *  
+championElise                       -5.527 3.36e-08 ***
+championEzreal                       2.130 0.033184 *  
+championFiora                       -0.701 0.483051    
+championGalio                       -3.226 0.001259 ** 
+championGnar                        -1.547 0.121950    
+championGragas                      -6.977 3.26e-12 ***
+championGraves                      -5.605 2.15e-08 ***
+championIvern                       -6.633 3.51e-11 ***
+championJanna                       -9.175  < 2e-16 ***
+championJarvan IV                   -6.314 2.86e-10 ***
+championJax                         -2.782 0.005412 ** 
+championJayce                        2.536 0.011231 *  
+championJhin                         0.412 0.680408    
+championKalista                     -2.334 0.019646 *  
+championKarma                       -7.234 5.14e-13 ***
+championKassadin                     0.793 0.427545    
+championKennen                      -0.946 0.344291    
+championKha'zix                     -5.900 3.78e-09 ***
+championKled                        -3.397 0.000684 ***
+championKog'Maw                      2.109 0.034992 *  
+championLeBlanc                      1.704 0.088402 .  
+championLee Sin                     -9.227  < 2e-16 ***
+championLucian                      -0.053 0.957392    
+championLulu                       -11.487  < 2e-16 ***
+championMalzahar                    -2.127 0.033452 *  
+championMaokai                      -3.816 0.000137 ***
+championMorgana                     -5.015 5.43e-07 ***
+championNami                        -5.531 3.28e-08 ***
+championNautilus                    -3.954 7.75e-05 ***
+championNidalee                     -3.698 0.000219 ***
+championOlaf                        -4.944 7.81e-07 ***
+championOrianna                     -0.675 0.499999    
+championRakan                      -10.917  < 2e-16 ***
+championRek'Sai                     -8.405  < 2e-16 ***
+championRenekton                    -4.339 1.45e-05 ***
+championRengar                      -7.169 8.21e-13 ***
+championRumble                       1.796 0.072528 .  
+championSejuani                     -7.477 8.44e-14 ***
+championShen                        -4.752 2.04e-06 ***
+championSivir                        0.326 0.744568    
+championSyndra                       0.150 0.880758    
+championTahm Kench                 -11.278  < 2e-16 ***
+championTaliyah                      3.592 0.000330 ***
+championTalon                       -0.439 0.660621    
+championTaric                       -7.528 5.71e-14 ***
+championThresh                     -12.289  < 2e-16 ***
+championTristana                    -1.032 0.302246    
+championTwitch                       1.219 0.222861    
+championVarus                       -2.011 0.044347 *  
+championViktor                       2.091 0.036546 *  
+championVladimir                    -0.515 0.606508    
+championXayah                        0.686 0.492810    
+championZac                         -5.586 2.40e-08 ***
+championZyra                        -4.096 4.24e-05 ***
+factor(result)1                      1.527 0.126767    
+championAlistar:factor(result)1     -0.360 0.719180    
+championAshe:factor(result)1         0.850 0.395292    
+championBard:factor(result)1        -0.519 0.604042    
+championBlitzcrank:factor(result)1  -0.708 0.479148    
+championBraum:factor(result)1       -0.753 0.451432    
+championCaitlyn:factor(result)1      2.805 0.005040 ** 
+championCamille:factor(result)1      2.047 0.040684 *  
+championCassiopeia:factor(result)1   1.890 0.058734 .  
+championCho'gath:factor(result)1     1.676 0.093773 .  
+championCorki:factor(result)1        1.050 0.293907    
+championEkko:factor(result)1         1.933 0.053330 .  
+championElise:factor(result)1       -0.284 0.776647    
+championEzreal:factor(result)1       1.125 0.260577    
+championFiora:factor(result)1        0.548 0.583377    
+championGalio:factor(result)1       -1.338 0.180954    
+championGnar:factor(result)1         0.102 0.918947    
+championGragas:factor(result)1      -1.045 0.296090    
+championGraves:factor(result)1       0.133 0.894110    
+championIvern:factor(result)1       -0.094 0.925206    
+championJanna:factor(result)1       -0.739 0.459866    
+championJarvan IV:factor(result)1    1.105 0.268983    
+championJax:factor(result)1          1.725 0.084565 .  
+championJayce:factor(result)1       -0.418 0.676103    
+championJhin:factor(result)1         0.599 0.548921    
+championKalista:factor(result)1      0.699 0.484591    
+championKarma:factor(result)1       -0.355 0.722385    
+championKassadin:factor(result)1     0.463 0.643505    
+championKennen:factor(result)1       0.499 0.618045    
+championKha'zix:factor(result)1      0.476 0.633915    
+championKled:factor(result)1         0.747 0.454919    
+championKog'Maw:factor(result)1      3.534 0.000412 ***
+championLeBlanc:factor(result)1      1.894 0.058320 .  
+championLee Sin:factor(result)1      0.249 0.803236    
+championLucian:factor(result)1       1.842 0.065470 .  
+championLulu:factor(result)1        -0.530 0.596344    
+championMalzahar:factor(result)1     0.659 0.510190    
+championMaokai:factor(result)1      -0.400 0.689341    
+championMorgana:factor(result)1     -1.164 0.244326    
+championNami:factor(result)1        -0.928 0.353536    
+championNautilus:factor(result)1    -0.022 0.982384    
+championNidalee:factor(result)1      1.875 0.060763 .  
+championOlaf:factor(result)1        -0.218 0.827789    
+championOrianna:factor(result)1      1.896 0.058006 .  
+championRakan:factor(result)1       -0.545 0.585918    
+championRek'Sai:factor(result)1     -0.458 0.646888    
+championRenekton:factor(result)1     0.439 0.660369    
+championRengar:factor(result)1       0.727 0.467189    
+championRumble:factor(result)1       0.864 0.387615    
+championSejuani:factor(result)1      0.345 0.730227    
+championShen:factor(result)1        -0.037 0.970621    
+championSivir:factor(result)1        2.599 0.009357 ** 
+championSyndra:factor(result)1       2.431 0.015080 *  
+championTahm Kench:factor(result)1  -0.852 0.394396    
+championTaliyah:factor(result)1      0.619 0.535661    
+championTalon:factor(result)1        0.548 0.583823    
+championTaric:factor(result)1       -0.705 0.480629    
+championThresh:factor(result)1      -1.097 0.272787    
+championTristana:factor(result)1     3.116 0.001841 ** 
+championTwitch:factor(result)1       2.092 0.036434 *  
+championVarus:factor(result)1        1.304 0.192272    
+championViktor:factor(result)1       2.251 0.024395 *  
+championVladimir:factor(result)1     1.815 0.069613 .  
+championXayah:factor(result)1        1.354 0.175871    
+championZac:factor(result)1         -0.903 0.366676    
+championZyra:factor(result)1         0.051 0.959366    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 141.4 on 7977 degrees of freedom
+Multiple R-squared:  0.5665,	Adjusted R-squared:  0.5593 
+F-statistic: 79.56 on 131 and 7977 DF,  p-value: < 2.2e-16
+

@@ -1,86 +1,86 @@
 position,team,player,dmg_performance
-Top,Team SoloMid,Hauntzer,26.17
-Top,Cloud9,Impact,16.86
-Top,Immortals,Flame,11.1
-Top,Counter Logic Gaming,Darshan,9.53
-Top,Echo Fox,Brandini,9.44
-Top,Cloud9,Ray,7.68
-Top,Phoenix1,zig,5.73
-Top,Dignitas,Ssumday,3.94
-Top,Team Liquid,Lourlo,2.31
-Top,EnVyUs,Seraph,2.03
-Top,FlyQuest,Balls,-0.81
-Top,Echo Fox,Looper,-5.37
-Top,Phoenix1,Allorim,-9.09
-Top,Flyquest,Balls,-16.03
-Jungle,Team Liquid,Inori,40.72
-Jungle,Counter Logic Gaming,Xmithie,31.6
-Jungle,Cloud9,Contractz,26.53
-Jungle,Immortals,Dardoch,26.02
-Jungle,Team SoloMid,Svenskeren,24.32
-Jungle,Counter Logic Gaming,Dardoch,22.23
-Jungle,Immortals,Xmithie,14.96
-Jungle,Phoenix1,Meteos,11.72
-Jungle,Dignitas,Shrimp,8.73
-Jungle,Phoenix1,MikeYeung,8.72
-Jungle,Team Liquid,Reignover,8.64
-Jungle,Team Liquid,Dardoch,7.37
-Jungle,Counter Logic Gaming,OmarGod,7.08
-Jungle,Echo Fox,Akaadian,4.34
-Jungle,Dignitas,Chaser,-0.43
-Jungle,Phoenix1,Inori,-4.22
-Jungle,Flyquest,Moon,-4.67
-Jungle,EnVyUs,LirA,-7.52
-Jungle,FlyQuest,Moon,-7.62
-Jungle,Echo Fox,Grig,-16.21
-Middle,Echo Fox,Froggen,25.49
-Middle,Flyquest,Hai,23.79
-Middle,Team SoloMid,Bjergsen,18.09
-Middle,Counter Logic Gaming,Huhi,16.61
-Middle,Team Liquid,Mickey,13.85
-Middle,EnVyUs,Ninja,13.45
-Middle,FlyQuest,Hai,13.28
-Middle,Dignitas,Keane,12.92
-Middle,Cloud9,Jensen,12.69
-Middle,Immortals,Pobelter,9.84
-Middle,Phoenix1,Ryu,8.44
-Middle,Team Liquid,Piglet,7.51
-Middle,Phoenix1,Pirean,5.4
-Middle,EnVyUs,Nisqy,1.64
-Middle,Team Liquid,Goldenglue,-1.18
-Middle,EnVyUs,Pirean,-5.87
-Middle,Team Liquid,Slooshi,-10.61
-Middle,Echo Fox,Damonte,-11.15
-ADC,Team SoloMid,Doublelift,18.45
-ADC,Dignitas,Altec,17.29
-ADC,Phoenix1,Arrow,14.62
-ADC,Cloud9,Sneaky,14.06
-ADC,Team Liquid,Piglet,12.63
-ADC,Counter Logic Gaming,Stixxay,11.11
-ADC,Immortals,Cody Sun,10.75
-ADC,Echo Fox,Keith,5.91
-ADC,FlyQuest,WildTurtle,3.06
-ADC,Echo Fox,Mash,2.79
-ADC,EnVyUs,Apollo,1.67
-ADC,Flyquest,Altec,-0.65
-ADC,Dignitas,LOD,-4.58
-ADC,Team Liquid,Doublelift,-7.71
-ADC,Counter Logic Gaming,aphromoo,-10.96
-ADC,Team SoloMid,WildTurtle,-28.4
-Support,Immortals,Olleh,39.38
-Support,Counter Logic Gaming,Joey,30.15
-Support,Dignitas,Adrian,26.54
-Support,FlyQuest,LemonNation,21.71
-Support,EnVyUs,Hakuho,17.06
-Support,Team Liquid,Matt,11.68
-Support,Team SoloMid,Biofrost,9.77
-Support,Team Liquid,konkwon,6.98
-Support,Dignitas,Big,6.32
-Support,Phoenix1,Shady,4.48
-Support,Cloud9,Smoothie,-1.49
-Support,Dignitas,Xpecial,-2.4
-Support,Counter Logic Gaming,aphromoo,-3.01
-Support,Flyquest,LemonNation,-5.11
-Support,Phoenix1,Xpecial,-6.8
-Support,Echo Fox,Gate,-10.65
-Support,Phoenix1,Stunt,-46.82
+Top,Team SoloMid,Hauntzer,24.08
+Top,Cloud9,Impact,14.21
+Top,Echo Fox,Brandini,10.47
+Top,Immortals,Flame,9.7
+Top,Counter Logic Gaming,Darshan,8.74
+Top,Cloud9,Ray,7.4
+Top,Phoenix1,zig,7.18
+Top,Team Liquid,Lourlo,3.62
+Top,Dignitas,Ssumday,3.6
+Top,EnVyUs,Seraph,2.83
+Top,FlyQuest,Balls,-0.02
+Top,Echo Fox,Looper,-4.74
+Top,Phoenix1,Allorim,-6.92
+Top,Flyquest,Balls,-17.77
+Jungle,Team Liquid,Inori,46.51
+Jungle,Counter Logic Gaming,Xmithie,32.99
+Jungle,Immortals,Dardoch,26.19
+Jungle,Cloud9,Contractz,25.2
+Jungle,Team SoloMid,Svenskeren,22.4
+Jungle,Counter Logic Gaming,Dardoch,21.35
+Jungle,Phoenix1,Meteos,15.68
+Jungle,Immortals,Xmithie,13.61
+Jungle,Phoenix1,MikeYeung,9.68
+Jungle,Team Liquid,Dardoch,9.61
+Jungle,Team Liquid,Reignover,9.08
+Jungle,Dignitas,Shrimp,8.65
+Jungle,Counter Logic Gaming,OmarGod,6.52
+Jungle,Echo Fox,Akaadian,4.92
+Jungle,Dignitas,Chaser,0.41
+Jungle,Phoenix1,Inori,-2.61
+Jungle,EnVyUs,LirA,-6.2
+Jungle,FlyQuest,Moon,-6.2
+Jungle,Flyquest,Moon,-6.65
+Jungle,Echo Fox,Grig,-14.65
+Middle,Echo Fox,Froggen,26.3
+Middle,Flyquest,Hai,20.92
+Middle,Counter Logic Gaming,Huhi,16.62
+Middle,Team SoloMid,Bjergsen,16.15
+Middle,EnVyUs,Ninja,15.69
+Middle,Team Liquid,Mickey,15.12
+Middle,FlyQuest,Hai,14.29
+Middle,Dignitas,Keane,12.11
+Middle,Cloud9,Jensen,11.44
+Middle,Phoenix1,Ryu,9.56
+Middle,Immortals,Pobelter,8.44
+Middle,Phoenix1,Pirean,7.42
+Middle,Team Liquid,Piglet,7.01
+Middle,EnVyUs,Nisqy,2.54
+Middle,Team Liquid,Goldenglue,0.45
+Middle,EnVyUs,Pirean,-5.19
+Middle,Echo Fox,Damonte,-8.75
+Middle,Team Liquid,Slooshi,-9.05
+ADC,Dignitas,Altec,16.45
+ADC,Team SoloMid,Doublelift,16.36
+ADC,Phoenix1,Arrow,16.04
+ADC,Team Liquid,Piglet,13.98
+ADC,Cloud9,Sneaky,12.58
+ADC,Counter Logic Gaming,Stixxay,10.59
+ADC,Immortals,Cody Sun,9.19
+ADC,Echo Fox,Keith,6.33
+ADC,Echo Fox,Mash,4.4
+ADC,FlyQuest,WildTurtle,3.81
+ADC,EnVyUs,Apollo,2.22
+ADC,Flyquest,Altec,-2.88
+ADC,Dignitas,LOD,-4.96
+ADC,Team Liquid,Doublelift,-7.53
+ADC,Counter Logic Gaming,aphromoo,-8.45
+ADC,Team SoloMid,WildTurtle,-29.33
+Support,Immortals,Olleh,37.96
+Support,Counter Logic Gaming,Joey,32.7
+Support,Dignitas,Adrian,25.29
+Support,FlyQuest,LemonNation,22.61
+Support,EnVyUs,Hakuho,17.87
+Support,Team Liquid,Matt,12.43
+Support,Team SoloMid,Biofrost,8.15
+Support,Team Liquid,konkwon,7.02
+Support,Dignitas,Big,6.41
+Support,Phoenix1,Shady,6.3
+Support,Dignitas,Xpecial,-0.6
+Support,Cloud9,Smoothie,-2.56
+Support,Counter Logic Gaming,aphromoo,-3.36
+Support,Phoenix1,Xpecial,-5.8
+Support,Flyquest,LemonNation,-7.07
+Support,Echo Fox,Gate,-9.98
+Support,Phoenix1,Stunt,-44.51

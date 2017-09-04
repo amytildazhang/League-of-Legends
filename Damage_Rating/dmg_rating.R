@@ -175,39 +175,7 @@ map_dbl(1:length(r_models), function(i){
 }) 
 
 
-i <- 14
-fit <- lm(r_models[[i]], matchdata)
-
-sink(paste0(savefolder, i, "/Diagnostics/lm_summary.txt"))
-summary(fit)
-sink()
-
-sink(paste0(savefolder, i, "/Diagnostics/lm_markdown.md"))
-knitr::kable(s$coefficients, format = "markdown")
-sink()
-
-fit_model_with_resid <- function(i, matchdata, r_models){
-    fit <- lm(r_models[[i]], matchdata)
-    if (i  == 13) {
-        fit$residuals <- (matchdata$dmgtochampsperminute - fit$fitted.values) /
-            fit$fitted.values
-    } else {
-        fit$residuals <- (matchdata$dmgtochamps - fit$fitted.values^2) /
-            fit$fitted.values^2
-    }
-    return(fit)
-}
-
-fit <- fit_model_with_resid(4, matchdata, r_models)
-
-fit <- lm(r_models[[11]], matchdata)
-fit$residuals <- (matchdata$dmgtochamps - fit$fitted.values^2) /
-    fit$fitted.values^2
-par(mfrow = c(2,2))
-plot(fit, ask = F)
-
-
-#output graphs and files that go in the "Output" folder for each model
+#output  graphs and files that go in the "Diagnostics" folder for each model
 output_diagnostics <- function(i, matchdata, r_models){
     red <- "#FF020A"
     blue <- "#0980B2"
@@ -244,7 +212,8 @@ output_diagnostics <- function(i, matchdata, r_models){
     par(mfrow = c(2,2))
     plot(fit, ask = F) 
     
-    plot(fit$residuals ~ matchdata$otherkillshare, main = "Other kill share")
+    #other kills defined as 1 - (player's assists + kills)/(team kills)
+    plot(fit$residuals ~ matchdata$otherkillshare, main = "% Resid vs other kill share")
     abline(h = 0)
     
     boxplot(fit$residuals ~ matchdata$champion, main = "% Resid vs champion")
@@ -292,7 +261,7 @@ output_diagnostics <- function(i, matchdata, r_models){
                       data = oks, size = 1) +
             labs(title = "Fitted curve for OKS") +
             ggsave(paste0(savefolder, i, "/Diagnostics/oks_fit.png"),
-                   height = 6, with = 8)
+                   height = 6, width = 8)
         
     }
     
@@ -323,7 +292,7 @@ output_diagnostics <- function(i, matchdata, r_models){
             champion = matchdata$champion,
             position = matchdata$position,
             dmgtochampsperminute = NA) %>%
-            full_join(avgoks)
+            full_join(avgoks, by = c("result", "champion", "position"))
         
         
         conf <- predict(fit, newdata = predictions, interval = "confidence")
@@ -343,30 +312,40 @@ output_diagnostics <- function(i, matchdata, r_models){
         if (i == 13) {
             matchdata %>% filter(position == pos) %>%
                 ggplot(aes(x = gamelength, y = dmgtochampsperminute)) +
-                geom_point(aes(shape = factor(result), color = factor(result)), 
-                           alpha = 0.5) +
+                geom_point(aes(shape = factor(result),
+                               color = factor(result)), alpha = 0.7) + 
+                scale_shape_manual(labels = c("loss", "win"),
+                                   values = c(16, 17)) +
+                scale_color_manual(values = c(blue, red),
+                                   labels = c("loss", "win")) +
                 geom_line(aes(group = factor(result), color = factor(result),
                               y = predicted)) +
-                scale_color_manual(values = c(blue, red)) +
                 facet_wrap(~champion, ncol = 4, scales = "free") +
                 theme_minimal() +
                 theme(axis.text = element_text(size = 8)) +
-                labs(y = ifelse(i == 13, "dmgtochampsperminute", "dmgtochamps"))
+                labs(y = "damage to champs / minute",
+                     x = "game length",
+                     shape = NULL, color = NULL)
             
             ggsave(paste0(savefolder, i, "/Diagnostics/prediction_graph_", pos, ".png"),
                    height = ceiling(n_champs/4)*1.5, width = 8.5)
             
             matchdata %>% filter(position == pos) %>%
                 ggplot(aes(x = goldspent, y = dmgtochampsperminute)) +
-                geom_point(aes(shape = factor(result), color = factor(result)), 
-                           alpha = 0.5) +
+                geom_point(aes(shape = factor(result),
+                               color = factor(result)), alpha = 0.7) + 
+                scale_shape_manual(labels = c("loss", "win"),
+                                   values = c(16, 17)) +
+                scale_color_manual(values = c(blue, red),
+                                   labels = c("loss", "win")) +
                 geom_line(aes(group = factor(result), color = factor(result),
                               y = predicted)) +
-                scale_color_manual(values = c(blue, red)) +
-                facet_wrap(~champion, scales="free") +
+                facet_wrap(~champion, scales="free", ncol = 4) +
                 theme_minimal() +
                 theme(axis.text = element_text(size = 8)) +
-                labs(y = ifelse(i == 13, "dmgtochampsperminute", "dmgtochamps"))
+                labs(y = "damage to champs / minute",
+                     x = "gold spent",
+                     color = NULL, shape = NULL)
             
             ggsave(paste0(savefolder, i, "/Diagnostics/gold_prediction_graph_", pos, ".png"),
                    height = ceiling(n_champs/4)*1.5, width = 8.5)
@@ -374,14 +353,20 @@ output_diagnostics <- function(i, matchdata, r_models){
             
             
             ggplot(matchdata %>% filter(position == pos), 
-                   aes(x = goldspent, y = resid)) +
+                   aes(x = goldspent, y = resid*100)) +
                 facet_wrap(~champion, scales = "free", ncol = 4) +
                 geom_point(aes(shape = factor(result),
                                color = factor(result)), alpha = 0.7) + 
-                scale_color_manual(values = c(blue, red)) +
+                scale_shape_manual(labels = c("loss", "win"),
+                                   values = c(16, 17)) +
+                scale_color_manual(values = c(blue, red),
+                                   labels = c("loss", "win")) +
                 geom_hline(aes(yintercept = 0), color = "gray") +
                 theme_minimal() + 
-                theme(axis.text = element_text(size = 8))
+                theme(axis.text = element_text(size = 8)) +
+                labs(x = "gold spent",
+                     y = "% difference from expected",
+                     color = NULL, shape = NULL)
             
             ggsave(paste0(savefolder, i, "/Diagnostics/residual_vs_gold_graph_", pos, ".png"),
                    height = ceiling(n_champs/4)*1.5, width = 8.5)  
@@ -402,60 +387,80 @@ output_diagnostics <- function(i, matchdata, r_models){
         } else if (i == 14) {
             matchdata %>% filter(position == pos) %>%
                 ggplot(aes(x = gamelength, y = dmgtochamps)) +
-                geom_point(aes(shape = factor(result), color = factor(result)), 
-                           alpha = 0.5) +
+                geom_point(aes(shape = factor(result),
+                               color = factor(result)), alpha = 0.7) + 
+                scale_shape_manual(labels = c("loss", "win"),
+                                   values = c(16, 17)) +
+                scale_color_manual(values = c(blue, red),
+                                   labels = c("loss", "win")) +
                 geom_line(aes(group = factor(result), color = factor(result),
                               y = predicted)) +
-                scale_color_manual(values = c(blue, red)) +
                 facet_wrap(~champion, scales = "free", ncol = 4) +
                 theme_minimal() +
                 theme(axis.text = element_text(size = 8)) +
-                labs(y = "dmgtochamps")
+                labs(y = "damage to champs",
+                     x = "game length",
+                     shape = NULL, color = NULL)
             
             ggsave(paste0(savefolder, i, "/Diagnostics/prediction_graph_", pos, ".png"),
                    height = ceiling(n_champs/4)*1.5, width = 8.5)
             
             matchdata %>% filter(position == pos) %>%
                 ggplot(aes(x = goldspent, y = dmgtochamps)) +
-                geom_point(aes(shape = factor(result), color = factor(result)), 
-                           alpha = 0.5) +
+                geom_point(aes(shape = factor(result),
+                               color = factor(result)), alpha = 0.7) + 
+                scale_shape_manual(labels = c("loss", "win"),
+                                   values = c(16, 17)) +
+                scale_color_manual(values = c(blue, red),
+                                   labels = c("loss", "win")) +
                 geom_line(aes(group = factor(result), color = factor(result),
                               y = predicted)) +
-                scale_color_manual(values = c(blue, red)) +
                 facet_wrap(~champion, scales = "free", ncol = 4) +
                 theme_minimal() +
                 theme(axis.text = element_text(size = 8)) +
-                labs(y = "dmgtochamps")
+                labs(y = "damage to champs",
+                     x = "gold spent",
+                     color = NULL, shape = NULL)
             
             ggsave(paste0(savefolder, i, "/Diagnostics/gold_prediction_graph_", pos, ".png"),
                    height = ceiling(n_champs/4)*1.5, width = 8.5)
             
             
             ggplot(matchdata %>% filter(position == pos), 
-                   aes(x = dmgtochamps, y = resid)) +
+                   aes(x = predicted, y = resid)) +
                 facet_wrap(~champion, scales = "free", ncol = 4) +
                 geom_point(aes(shape = factor(result),
                                color = factor(result)), alpha = 0.7) + 
-                scale_color_manual(values = c(blue, red)) +
+                scale_shape_manual(labels = c("loss", "win"),
+                                   values = c(16, 17)) +
+                scale_color_manual(values = c(blue, red),
+                                   labels = c("loss", "win")) +
                 geom_hline(aes(yintercept = 0), color = "gray") +
                 theme_minimal() + 
                 theme(axis.text = element_text(size = 8)) +
-                labs(x =  "dmgtochampsperminute")
+                labs(x =  "sqrt(expected damage to champs)",
+                     y = "% difference from expected",
+                     shape = NULL, color = NULL)
             
             ggsave(paste0(savefolder, i, "/Diagnostics/residual_graph_", pos, ".png"),
                    height = ceiling(n_champs/4)*1.5, width = 8.5)  
             
             
             ggplot(matchdata %>% filter(position == pos), 
-                   aes(x = goldspent, y = resid)) +
+                   aes(x = goldspent, y = resid*100)) +
                 facet_wrap(~champion, scales = "free", ncol = 4) +
                 geom_point(aes(shape = factor(result),
                                color = factor(result)), alpha = 0.7) + 
-                scale_color_manual(values = c(blue, red)) +
+                scale_shape_manual(labels = c("loss", "win"),
+                                   values = c(16, 17)) +
+                scale_color_manual(values = c(blue, red),
+                                   labels = c("loss", "win")) +
                 geom_hline(aes(yintercept = 0), color = "gray") +
                 theme_minimal() + 
                 theme(axis.text = element_text(size = 8)) +
-                labs(x =  "dmgtochampsperminute")
+                labs(x = "gold spent",
+                     y = "% difference from expected",
+                     shape = NULL, color = NULL)
             
             ggsave(paste0(savefolder, i, "/Diagnostics/residual_vs_gold_graph_", pos, ".png"),
                    height = ceiling(n_champs/4)*1.5, width = 8.5)  
@@ -464,9 +469,13 @@ output_diagnostics <- function(i, matchdata, r_models){
         } else {
             matchdata %>% filter(position == pos) %>%
                 ggplot(aes(x = gamelength, y = dmgtochamps)) +
-                geom_point(alpha = 0.5) +
                 geom_line(data = predictions %>% filter(position == pos)) +
-                scale_color_manual(values = c(blue, red)) +
+                geom_point(aes(shape = factor(result),
+                               color = factor(result)), alpha = 0.7) + 
+                scale_shape_manual(labels = c("loss", "win"),
+                                   values = c(16, 17)) +
+                scale_color_manual(values = c(blue, red),
+                                   labels = c("loss", "win")) +
                 facet_wrap(~champion, scales = "free", ncol = 4) +
                 geom_ribbon(aes(ymin = lwr, ymax = upr),
                             fill = yellow,
@@ -475,16 +484,22 @@ output_diagnostics <- function(i, matchdata, r_models){
                 ) +
                 theme_minimal() +
                 theme(axis.text = element_text(size = 8)) +
-                labs(title = "OKS set to median")
+                labs(x = "game length",
+                     y = "damage to champs",
+                     shape = NULL, color = NULL)
             ggsave(paste0(savefolder, i, "/Diagnostics/prediction_graph_", pos, ".png"),
                    height = ceiling(n_champs/4)*1.5, width = 8.5)
             
             
             matchdata %>% filter(position == pos) %>%
                 ggplot(aes(x = goldspent, y = dmgtochamps)) +
-                geom_point(alpha = 0.5) +
                 geom_line(data = predictions %>% filter(position == pos)) +
-                scale_color_manual(values = c(blue, red)) +
+                geom_point(aes(shape = factor(result),
+                               color = factor(result)), alpha = 0.7) + 
+                scale_shape_manual(labels = c("loss", "win"),
+                                   values = c(16, 17)) +
+                scale_color_manual(values = c(blue, red),
+                                   labels = c("loss", "win")) +
                 facet_wrap(~champion, scales = "free", ncol = 4) +
                 geom_ribbon(aes(ymin = lwr, ymax = upr),
                             fill = yellow,
@@ -493,20 +508,27 @@ output_diagnostics <- function(i, matchdata, r_models){
                 ) +
                 theme_minimal() +
                 theme(axis.text = element_text(size = 8)) +
-                labs(title = "OKS set to median")
+                labs(x = "gold spent",
+                     y = "damage to champs",
+                     color = NULL, shape = NULL)
             ggsave(paste0(savefolder, i, "/Diagnostics/gold_prediction_graph_", pos, ".png"),
                    height = ceiling(n_champs/4)*1.5, width = 8.5)
             
             ggplot(predictions %>% filter(position == pos), 
-                   aes(x = sqrt(dmgtochamps), y = resid)) +
+                   aes(x = sqrt(dmgtochamps), y = resid*100)) +
                 facet_wrap(~champion, scales = "free", ncol = 4) +
                 geom_point(aes(shape = factor(result),
                                color = factor(result)), alpha = 0.7) + 
-                scale_color_manual(values = c(blue, red)) +
+                scale_shape_manual(labels = c("loss", "win"),
+                                   values = c(16, 17)) +
+                scale_color_manual(values = c(blue, red),
+                                   labels = c("loss", "win")) +
                 geom_hline(aes(yintercept = 0), color = "gray") +
                 theme_minimal() + 
                 theme(axis.text = element_text(size = 8)) +
-                labs(x="sqrt(predicted dmgtochamps)")
+                labs(x = "sqrt(expected damage to champs)",
+                     y = "% difference from expected",
+                     color = NULL, shape = NULL)
             
             ggsave(paste0(savefolder, i, "/Diagnostics/residual_graph_", pos, ".png"),
                    height = ceiling(n_champs/4)*1.5, width = 8.5)  
@@ -550,7 +572,8 @@ output_rankings <- function(i, matchdata, r_models){
     adj_data <- matchdata %>% 
         left_join(matchdata %>%
                       group_by(player, position) %>%
-                      summarise(n_games = n()) )
+                      summarise(n_games = n()) ,
+                  by = c("player", "position"))
     
     walk(unique(adj_data$league), function(lg){
         a <- adj_data %>% filter(league  == lg) 
@@ -577,7 +600,8 @@ output_rankings <- function(i, matchdata, r_models){
                 avg_dmg = (total_predicted*mean_r + total_predicted)/n_games)
         c <- c %>%
             left_join(c %>% group_by(position) %>%
-                          summarise(max_predicted = max(avg_predicted)))
+                          summarise(max_predicted = max(avg_predicted)),
+                      by = "position")
         c %>%
             ggplot(aes(x = mean_r, y = median_r)) +
             labs(y = "median % resid", size = "% of highest prediction/position",
@@ -600,9 +624,10 @@ output_rankings <- function(i, matchdata, r_models){
         walk(unique(a$position), function(pos){
             n_champs <- unique(a$champion[a$position  == pos]) %>% length
             p <- a %>% filter(n_games >= 8, position  == pos)
-            max_y <- (max(p$resid) + 0.1) %>% round(digits = 1)
+            max_y <- (max(p$resid*100) + 1) %>% signif(digits = 2)
             a %>% filter(n_games >=  8, position  == pos) %>%
-                ggplot(aes(x = predicted, y = resid, color = champion, shape = champion)) +
+                ggplot(aes(x = predicted, y = resid*100, 
+                           color = champion, shape = champion)) +
                 geom_point(aes(alpha = champion), stroke = 0.8) +
                 scale_colour_manual(name = "Champion",
                                     values = color_vals[1:n_champs]) +
@@ -610,19 +635,21 @@ output_rankings <- function(i, matchdata, r_models){
                                    values = shape_vals[1:n_champs]) +
                 scale_alpha_manual(name = "Champion",
                                    values = alpha_vals[1:n_champs]) +
-                facet_wrap(~player, nrow = 3) +
+                facet_wrap(~player, ncol = 4) +
                 theme_minimal() +
-                labs(y = "% diff") +
+                labs(y = "% difference from expected",
+                     x = "expected damage to champs") +
+                theme(panel.spacing = unit(1, "lines"),
+                      axis.text.x = element_text(size = 7)) +
                 geom_hline(aes(yintercept = 0), color = "gray") +
                 geom_abline(aes(slope = 1, intercept = 0), color = "gray") +
-                scale_y_continuous(breaks = seq(-1, max_y, by = 0.5),
-                                   minor_breaks = seq(-1, max_y, by = 0.1))
+                scale_y_continuous(breaks = seq(-100, max_y, by = 50),
+                                   minor_breaks = seq(-100, max_y, by = 10))
             
-            ncols <- ceiling(n_champs/3)
-            
+            nrows <- ceiling(unique(p$player) %>% length %>% `/`(4))
             ggsave(paste0(savefolder, i, "/Rankings/", lg, 
                           "_breakdown_", pos, ".png"),
-                   width = ncols*2 + 1, height = 6)
+                   width = 9, height = 2.2*nrows)
         })
         
         
@@ -631,13 +658,15 @@ output_rankings <- function(i, matchdata, r_models){
         
         c %>%
             ggplot(aes(x = avg_predicted, y = mean_r)) +
+            facet_wrap(~position, scales = "free_x") +
             geom_point(alpha = 0.7, size = 2) +
             geom_hline(aes(yintercept = 0), alpha = 0.7) +
             geom_text_repel(aes(label = player), size = 3) +
-            facet_wrap(~position, scales = "free_x") +
             theme_minimal() +
-            theme(legend.position = "bottom") +
-            labs(x = "average predicted damage", y = "mean % difference from prediction")
+            theme(legend.position = "bottom",
+                  panel.spacing = unit(2, "lines")) +
+            labs(x = "expected damage", 
+                 y = "mean % difference from prediction")
         ggsave(paste0(savefolder, i, "/Rankings/", lg, "_dmgvsresid_graph.png"),
                width = 10, height = 7.5)
         
@@ -649,8 +678,8 @@ output_rankings <- function(i, matchdata, r_models){
             mutate(
                 plabel = fct_inorder(plabel)
             ) %>%
-            ggplot(aes(x = plabel, y = resid)) +
-            labs(y = "% diff from expected", fill = NULL, x = NULL) +
+            ggplot(aes(x = plabel, y = resid*100)) +
+            labs(y = "% difference from expected", fill = NULL, x = NULL) +
             geom_violin(aes(fill = position %>% 
                                 fct_relevel(c("Top", "Jungle", "Middle", "ADC", "Support"))), 
                         alpha = 0.7, draw_quantiles = 0.5) +
@@ -727,21 +756,31 @@ summary(fit)
 #LPRE-specific fit and graphs
 source("LPRE.R")
 
-xpredmatrix <- model.matrix(dmgtochamps ~ champion*log(goldspent) + position*log(goldspent), 
-                            data = matchdata)
+j <- 1 #choose which LPRE model to use
+
+
+lpre_models <- list(
+    ~ champion*log(goldspent) + position*log(goldspent),
+    ~ champion*log(goldspent) + position*log(goldspent) + result
+)
+
+lpre_folders <- c("LPRE", "LPRE_result")
+
+
+xpredmatrix <- model.matrix(lpre_models[[j]], data = matchdata)
 beta0 = lm(log(matchdata$dmgtochamps)~xpredmatrix-1)$coeff
 temp = findroot(matchdata$dmgtochamps,xpredmatrix,beta0)
 
-matchdata$predicted <- exp(xpredmatrix %*% temp$beta.hat)
-matchdata$resid <- (matchdata$dmgtochamps - matchdata$predicted)/matchdata$predicted
 fitted <- exp(xpredmatrix %*% temp$beta.hat)
 residuals <- (matchdata$dmgtochamps - fitted)
+matchdata$predicted <- fitted
+matchdata$resid <- residuals/fitted
 (residuals/fitted)^2 %>% mean
 
-plot(residuals/fitted ~ log(fitted))
-abline(h = 0)
-plot(residuals/matchdata$dmgtochamps ~ log(fitted))
 
+
+#Since this doesn't use the `lm` function, we no longer have an `lm` object,
+#so by re-do graphs separately (out of sheer laziness)
 
 purple <- "#85016E"
 red <- "#FF020A"
@@ -749,42 +788,43 @@ blue <- "#0980B2"
 yellow <- "#C4A20A"
 green <- "#006112"
 
-pdf(paste0(savefolder, "LPRE_result/Diagnostics/diagnostics.pdf"))
+pdf(paste0(savefolder, lpre_folders[j], "/Diagnostics/diagnostics.pdf"))
 par(mfrow = c(1,1))
-hist(residuals/fitted.values)
+hist(residuals/fitted)
 
-plot(residuals/fitted.values ~ matchdata$otherkillshare, main = "Other kill share")
+plot(residuals/fitted ~ matchdata$otherkillshare, main = "Other kill share")
 abline(h = 0)
 
-boxplot(residuals/fitted.values ~ matchdata$champion, main = "% Resid vs champion")
+boxplot(residuals/fitted ~ matchdata$champion, main = "% Resid vs champion")
 
-boxplot(residuals/fitted.values ~ factor(matchdata$result), main = "% Resid vs result") 
+boxplot(residuals/fitted ~ factor(matchdata$result), main = "% Resid vs result") 
 
-boxplot(residuals/fitted.values ~ factor(matchdata$firedrakes), main = "% Resid vs firedrakes")
-# boxplot(residuals/fitted.values ~ factor(matchdata$league), main = "Resid vs league")
-# boxplot(residuals/fitted.values ~ factor(matchdata$side), main = "Resid vs side")
+boxplot(residuals/fitted ~ factor(matchdata$firedrakes), main = "% Resid vs firedrakes")
+# boxplot(residuals/fitted ~ factor(matchdata$league), main = "Resid vs league")
+# boxplot(residuals/fitted ~ factor(matchdata$side), main = "Resid vs side")
 
-plot(residuals/fitted.values ~ log(matchdata$gamelength), main = "% Resid vs log(gamelength)",
+plot(residuals/fitted ~ log(matchdata$gamelength), main = "% Resid vs log(gamelength)",
      ylim = c(-2,2))
 abline(h = 0)
 
-plot(residuals/fitted.values ~ matchdata$goldspent, main = "% Resid vs goldspent")
-abline(h = 0)
-plot(actual_r ~ matchdata$goldspent, main = "Resid vs goldspent")
+plot(residuals/fitted ~ log(matchdata$goldspent), main = "% Resid vs log(goldspent)")
 abline(h = 0)
 
-plot(residuals/fitted.values ~ log(matchdata$otherkills + 0.1), main = "% Resid vs log(otherkills)")
+plot(residuals/fitted ~ log(matchdata$otherkills + 0.1), main = "% Resid vs log(otherkills)")
 abline(h = 0)
 
-plot(residuals/fitted.values ~ log(matchdata$teamkills + 0.1), main = "% Resid vs log(teamkills)")
+plot(residuals/fitted ~ log(matchdata$teamkills + 0.1), main = "% Resid vs log(teamkills)")
 abline(h = 0)
 
-plot(residuals/fitted.values ~ matchdata$killshare, main = "% Resid vs killshare")
+plot(residuals/fitted ~ matchdata$killshare, main = "% Resid vs killshare")
 abline(h = 0)
 
 dev.off()
 
 
+
+#To graph a smooth `expected damage` curve, need to get predicted values
+#at regular points up to max `goldspent` in dataset
 r_gold <- range(matchdata$goldspent)
 champ_pos <- unique(matchdata[,c("champion", "position")])
 goldseq <- seq(r_gold[1], r_gold[2], by = 500)
@@ -804,10 +844,8 @@ predictions <- map2_df(champ_pos$champion, champ_pos$position, function(champ, p
         position = pos
     )  })
 
-xpredmatrix <- model.matrix(~ champion*log(goldspent) + position*log(goldspent) + result, 
-                            data = predictions)
+xpredmatrix <- model.matrix(lpre_models[[j]], data = predictions)
 predictions$predicted <- exp(xpredmatrix %*% temp$beta.hat)
-predictions$resid <- (predictions$predicted - predictions$predicted)/predictions$predicted
 
 
 matchdata$resid <- as.vector(matchdata$resid)
@@ -816,39 +854,69 @@ walk(c("Top", "Jungle", "Middle", "ADC", "Support"), function(pos){
     
     n_champs <- length(unique(matchdata$champion[matchdata$position == pos])) 
     
-    matchdata %>% filter(position == pos) %>%
-        ggplot(aes(x = goldspent, y = dmgtochamps)) +
-        geom_point(aes(color = factor(result)), alpha = 0.3) +
-        geom_line(aes(y = predicted, color=factor(result), group=factor(result)),
-                  data=predictions %>% filter(position == pos)) +
-        scale_color_manual(values = c(blue, red)) +
-        facet_wrap(~champion) +
-        theme_minimal() +
-        theme(axis.text = element_text(size = 8)) 
+    if (j == 1){
+        matchdata %>% filter(position == pos) %>%
+            ggplot(aes(x = goldspent, y = dmgtochamps)) +
+            geom_point(aes(shape = factor(result),
+                           color = factor(result)), alpha = 0.7) + 
+            scale_shape_manual(labels = c("loss", "win"),
+                               values = c(16, 17)) +
+            scale_color_manual(values = c(blue, red),
+                               labels = c("loss", "win")) +
+            geom_line(aes(y = predicted),
+                      data = predictions %>% filter(position == pos)) +
+            facet_wrap(~champion, ncol = 4) +
+            theme_minimal() +
+            theme(axis.text = element_text(size = 8)) +
+            labs(x = "gold spent",
+                 y = "damage to champs",
+                 shape = NULL, color = NULL)
+    } else {
+        matchdata %>% filter(position == pos) %>%
+            ggplot(aes(x = goldspent, y = dmgtochamps)) +
+            geom_point(aes(shape = factor(result),
+                           color = factor(result)), alpha = 0.7) + 
+            scale_shape_manual(labels = c("loss", "win"),
+                               values = c(16, 17)) +
+            scale_color_manual(values = c(blue, red),
+                               labels = c("loss", "win")) +
+            geom_line(aes(y = predicted,color = factor(result)),
+                      data = predictions %>% filter(position == pos)) +
+            facet_wrap(~champion, ncol = 4) +
+            theme_minimal() +
+            theme(axis.text = element_text(size = 8)) +
+            labs(x = "gold spent",
+                 y = "damage to champs",
+                 shape = NULL, color = NULL)
+        
+    }
     
-    ggsave(paste0(savefolder, "LPRE_result/Diagnostics/gold_prediction_graph_", pos, ".png"),
+    ggsave(paste0(savefolder, lpre_folders[j], "/Diagnostics/gold_prediction_graph_", pos, ".png"),
            height = ceiling(n_champs/4)*1.5, width = 10)  
     
     ggplot(matchdata %>% filter(position == pos), 
-           aes(x = log(predicted), y = resid)) +
+           aes(x = log(predicted), y = resid*100)) +
         facet_wrap(~champion, scales = "free", ncol = 4) +
         geom_point(aes(shape = factor(result),
                        color = factor(result)), alpha = 0.7) + 
-        scale_color_manual(values = c(blue, red)) +
+        scale_shape_manual(labels = c("loss", "win"),
+                           values = c(16, 17)) +
+        scale_color_manual(values = c(blue, red),
+                           labels = c("loss", "win")) +
         geom_hline(aes(yintercept = 0), color = "gray") +
         theme_minimal() + 
-        theme(axis.text = element_text(size = 8))
+        theme(axis.text = element_text(size = 8))+
+        labs(x = "ln(expected damage to champs)",
+             y = "% difference from expected",
+             shape = NULL, color = NULL)
     
-    ggsave(paste0(savefolder, "LPRE_result/Diagnostics/residual_graph_", pos, ".png"),
+    ggsave(paste0(savefolder, lpre_folders[j], "/Diagnostics/residual_graph_", pos, ".png"),
            height = ceiling(n_champs/4)*1.5, width = 8.5)  
     
-}
+})
 
 
-)
-
-
-sink(paste0(savefolder, "LPRE_result/Diagnostics/fit_summary.txt"))
+sink(paste0(savefolder, lpre_folders[j], "/Diagnostics/fit_summary.txt"))
 temp$beta.hat
 sink()
 
@@ -872,12 +940,12 @@ walk(unique(adj_data$league), function(lg){
     a <- adj_data %>% filter(league  == lg) 
     a %>%
         select(league, team, player, champion, dmgtochamps, predicted, goldspent) %>%
-        write_csv(paste0(savefolder, "LPRE_result/Rankings/", lg, "_dmg_vals.csv"))
+        write_csv(paste0(savefolder, lpre_folders[j], "/Rankings/", lg, "_dmg_vals.csv"))
     a %>%
         group_by(position, team, player) %>%
         summarise(dmg_performance = round(mean(resid)*100, digits = 2)) %>%
         arrange(position, desc(dmg_performance)) %>%
-        write_csv(paste0(savefolder, "LPRE_result/Rankings/", lg, "_dmg_ratings.csv"))
+        write_csv(paste0(savefolder, lpre_folders[j], "/Rankings/", lg, "_dmg_ratings.csv"))
     
     cd <- a %>% filter(n_games >=  8) %>%
         group_by(player, n_games, position) %>%
@@ -898,8 +966,9 @@ walk(unique(adj_data$league), function(lg){
                   by = "position")
     cd %>%
         ggplot(aes(x = mean_r, y = median_r)) +
-        labs(y = "median % resid", size = "% of highest prediction/position",
-             x = "mean % resid") +
+        labs(y = "median % difference from expected", 
+             size = "% of highest prediction/position",
+             x = "mean % difference from expected") +
         geom_point(aes(size = avg_predicted/max_predicted), alpha = 0.7) +
         geom_abline(aes(slope = 1, intercept = 0), color = "gray", linetype = "dotdash") +
         geom_vline(aes(xintercept = 0), color = "gray") +
@@ -909,22 +978,22 @@ walk(unique(adj_data$league), function(lg){
         facet_wrap(~position) +
         theme_minimal() +
         theme(legend.position = "bottom")
-    ggsave(paste0(savefolder, "LPRE_result/Rankings/", lg, "_meanvsmedian_graph.png"),
+    ggsave(paste0(savefolder, lpre_folders[j], "/Rankings/", lg, "_meanvsmedian_graph.png"),
            width = 10, height = 7.5)
     
     
     cd %>%
         ggplot(aes(x = median_predicted, y = median_r)) +
-        geom_point(alpha = 0.7) +
-        # geom_abline(aes(slope = 1, intercept = 0), color = "gray", linetype = "dotdash") +
-        # geom_vline(aes(xintercept = 0), color = "gray") +
-        geom_hline(aes(yintercept = 0), color = "gray") +
-        geom_text_repel(aes(label = player), 
-                        size = 2) +
         facet_wrap(~position, scales = "free_x") +
+        geom_point(alpha = 0.7, size = 2) +
+        geom_hline(aes(yintercept = 0), alpha = 0.7) +
+        geom_text_repel(aes(label = player), size = 3) +
         theme_minimal() +
-        theme(legend.position = "bottom")
-    ggsave(paste0(savefolder, "LPRE_result/Rankings/", lg, "graph_byposition.png"),
+        theme(legend.position = "bottom",
+              panel.spacing = unit(2, "lines")) +
+        labs(x = "median expected damage",
+             y = "median % difference from expected")
+        ggsave(paste0(savefolder, lpre_folders[j], "/Rankings/", lg, "_dmgvsresid_graph.png"),
            width = 10, height = 7.5)
     
     
@@ -934,9 +1003,10 @@ walk(unique(adj_data$league), function(lg){
     walk(unique(a$position), function(pos){
         n_champs <- unique(a$champion[a$position  == pos]) %>% length
         p <- a %>% filter(n_games >=  8, position  == pos)
-        max_y <- (max(p$resid) + 0.1) %>% round(digits = 1)
+        max_y <- (max(p$resid*100) + 1) %>% signif(digits = 2)
         a %>% filter(n_games >=  8, position  == pos) %>%
-            ggplot(aes(x = goldspent, y = resid, color = champion, shape = champion)) +
+            ggplot(aes(x = goldspent, y = resid*100, 
+                       color = champion, shape = champion)) +
             geom_point(aes(alpha = champion), stroke = 0.8) +
             scale_colour_manual(name = "Champion",
                                 values = color_vals[1:n_champs]) +
@@ -944,19 +1014,22 @@ walk(unique(adj_data$league), function(lg){
                                values = shape_vals[1:n_champs]) +
             scale_alpha_manual(name = "Champion",
                                values = alpha_vals[1:n_champs]) +
-            facet_wrap(~player, nrow = 3) +
+            facet_wrap(~player, ncol = 4) +
             theme_minimal() +
-            labs(y = "% diff") +
+            labs(y = "% difference from expected",
+                 x = "expected damage to champs") +
+            theme(panel.spacing = unit(1, "lines"),
+                  axis.text.x = element_text(size = 7)) +
             geom_hline(aes(yintercept = 0), color = "gray") +
             geom_abline(aes(slope = 1, intercept = 0), color = "gray") +
-            scale_y_continuous(breaks = seq(-1, max_y, by = 0.5),
-                               minor_breaks = seq(-1, max_y, by = 0.1))
+            scale_y_continuous(breaks = seq(-100, max_y, by = 50),
+                               minor_breaks = seq(-100, max_y, by = 10))
         
-        ncols <- ceiling(n_champs/3)
+        nrows <- ceiling(unique(p$player) %>% length %>% `/`(4))
         
-        ggsave(paste0(savefolder, "LPRE_result/Rankings/", lg, 
+        ggsave(paste0(savefolder, lpre_folders[j], "/Rankings/", lg, 
                       "_breakdown_", pos, ".png"),
-               width = ncols * 2 + 1, height = 6)
+               width = 9, height = 2.2*nrows)
         
     })
 })

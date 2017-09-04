@@ -144,7 +144,7 @@ winloss_updown <- team_summaries %>%
                                    " ", sprintf('\u2193'), games_behind)), 
                   size=2, force=4) +
  # facet_wrap(~league, ncol=1) +
-  facet_wrap(~league) +
+  facet_wrap(~league, ncol = 2) +
   geom_hline(aes(yintercept=50), color="gray") +
   geom_vline(aes(xintercept=50), color="gray") +
   # xlim(0,100) + ylim(0,100) +
@@ -164,11 +164,12 @@ winloss_updown <- team_summaries %>%
         legend.box.spacing = unit(0.5, "pt"),
         legend.text = element_text(size=6),
         legend.title = element_text(size=8),
-        plot.title = element_text(margin=margin(b=-7, unit="pt")))
+        plot.title = element_text(margin=margin(b=-7, unit="pt")),
+        panel.spacing = unit(2, "lines"))
 winloss_updown
 
 ggsave(paste0(savefolder, "comparison_winloss_updown.png"),
-       width=8, height=6)
+       width=6, height=8)
 
 
 #a graph that I was trying out and decided not to use
@@ -184,7 +185,7 @@ team_summaries %>%
                                    team, " ", sprintf('\u2191'), games_ahead, 
                                    " ", sprintf('\u2193'), games_behind)), 
                   size=1.5) +
-  facet_wrap(~league) +
+  facet_wrap(~league, ncol = 2) +
   labs(x="average lead %/% (average lead + average deficit)",
        y="% games ahead") +
   geom_vline(aes(xintercept=0.5), color="gray") +
@@ -213,7 +214,7 @@ comparison_lead_deficit <- team_summaries %>%
                                    team, " ", sprintf('\u2191'), games_ahead, 
                                    " ", sprintf('\u2193'), games_behind)), 
                   size=2, force=4) +
-  facet_wrap(~league, scales="free") +
+  facet_wrap(~league, scales="free", ncol = 2) +
   geom_abline(aes(slope=1, intercept=0), color="gray") +
   labs(size="|average|", color="game win %",
        title="Average leads vs deficits",
@@ -226,12 +227,13 @@ comparison_lead_deficit <- team_summaries %>%
         legend.title = element_text(size=8),
         plot.title = element_text(margin=margin(b=-7, unit="pt")),
         legend.key.size = unit(5, "pt"),
-        legend.key.width = unit(10, "pt")) #+
+        legend.key.width = unit(10, "pt"),
+        panel.spacing = unit(2, "lines")) #+
 comparison_lead_deficit
 ggsave(paste0(savefolder, "comparison_lead_deficit.png"),
-       width=8, height=6)
+       width=6, height=8)
 
-
+library(cowplot)
 #plot win/loss graph and average lead/deficit graph next to each other
 plot_grid(winloss_updown + facet_wrap(~league, ncol=1, scales="free") +
 

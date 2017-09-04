@@ -1,20 +1,17 @@
 Model descriptions
 
 4:   sqrt(dmgtochamps) ~ champion + position*log(goldspent)
-	MSE 0.02733051
 
 11:  sqrt(dmgtochamps) ~ champion + position * log(gamelength) + poly(otherkillshare, 3)
-	MSE 0.03236644
 
 12:  sqrt(dmgtochamps) ~ champion + position*poly(log(gamelength), 2) + poly(otherkillshare, 3)
-	MSE 0.02873822
   
 13:  dmgtochampsperminute ~ champion*factor(result)
-	MSE -0.87397200
 
 14:  sqrt(dmgtochamps) ~ champion*factor(result) + position
-	MSE 0.05047778
 
 
-LPRE: champion + position*sqrt(goldspent)
-	MSE 0.115
+LPRE: champion*sqrt(goldspent) + position*sqrt(goldspent)
+
+
+LPRE_result: champion*sqrt(goldspent) + position*sqrt(goldspent) + result
